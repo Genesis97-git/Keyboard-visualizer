@@ -6,1279 +6,7 @@
 
 <title>Keyboard Visualizer</title>
 
-<style>
-:root {
-    --bg: #090d12;
-    --panel: #151b23;
-    --keyboard: #0d131a;
-
-    --key: #202936;
-    --key-top: #2b3747;
-    --key-hover: #354356;
-
-    --border: #3d4b5e;
-
-    --text: #f5f7fa;
-    --muted: #94a3b8;
-
-    --accent: #5eead4;
-    --accent-dark: #14b8a6;
-
-    --ctrl: #3b82f6;
-    --shift: #a855f7;
-    --alt: #f97316;
-    --win: #ef4444;
-
-    --key-height: 60px;
-}
-
-
-/* =========================================================
-   GLOBAL
-   ========================================================= */
-
-* {
-    box-sizing: border-box;
-}
-
-html,
-body {
-    margin: 0;
-    width: 100%;
-    min-height: 100%;
-}
-
-body {
-    padding: 20px;
-
-    color: var(--text);
-
-    background:
-        radial-gradient(
-            circle at 50% 0%,
-            #1c2a3b,
-            var(--bg) 58%
-        );
-
-    font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-}
-
-button,
-input,
-select {
-    font: inherit;
-}
-
-.app {
-    width: min(1800px, 100%);
-    margin: auto;
-}
-
-
-/* =========================================================
-   HEADER
-   ========================================================= */
-
-.header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 20px;
-
-    margin-bottom: 15px;
-}
-
-.title h1 {
-    margin: 0 0 4px;
-
-    font-size: 25px;
-}
-
-.subtitle {
-    color: var(--muted);
-
-    font-size: 12px;
-}
-
-.header-buttons {
-    display: flex;
-    align-items: center;
-
-    gap: 7px;
-}
-
-.header-button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    min-height: 38px;
-
-    padding: 8px 12px;
-
-    color: var(--text);
-
-    background: #202936;
-
-    border: 1px solid var(--border);
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    font-size: 12px;
-}
-
-.header-button:hover {
-    background: var(--key-hover);
-}
-
-
-/* =========================================================
-   LAYOUT SELECTOR
-   ========================================================= */
-
-.layout-selector {
-    position: relative;
-}
-
-.layout-button {
-    min-width: 108px;
-}
-
-.layout-menu {
-    position: absolute;
-
-    top: calc(100% + 6px);
-    right: 0;
-
-    z-index: 500;
-
-    display: none;
-
-    width: 150px;
-
-    padding: 5px;
-
-    background: #151b23;
-
-    border: 1px solid var(--border);
-    border-radius: 9px;
-
-    box-shadow:
-        0 20px 50px rgba(0,0,0,.5);
-}
-
-.layout-menu.open {
-    display: block;
-}
-
-.layout-option {
-    width: 100%;
-
-    padding: 9px 10px;
-
-    text-align: left;
-
-    color: var(--muted);
-
-    background: transparent;
-
-    border: 1px solid transparent;
-    border-radius: 6px;
-
-    cursor: pointer;
-
-    font-size: 12px;
-}
-
-.layout-option:hover {
-    color: var(--text);
-
-    background: #263344;
-}
-
-.layout-option.active {
-    color: var(--text);
-
-    background: #263344;
-
-    border-color: #3e5066;
-}
-
-
-/* =========================================================
-   STATUS
-   ========================================================= */
-
-.status-bar {
-    display: flex;
-    flex-wrap: wrap;
-
-    gap: 8px;
-
-    margin-bottom: 12px;
-}
-
-.status-pill {
-    padding: 6px 10px;
-
-    color: var(--muted);
-
-    background: rgba(21,27,35,.9);
-
-    border: 1px solid var(--border);
-    border-radius: 7px;
-
-    font-size: 11px;
-}
-
-.status-pill strong {
-    color: var(--accent);
-}
-
-
-/* =========================================================
-   COMBINATION DISPLAY
-   ========================================================= */
-
-.combination-display {
-    min-height: 52px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    margin-bottom: 12px;
-    padding: 7px 14px;
-
-    background: rgba(7,11,16,.95);
-
-    border: 1px solid var(--border);
-    border-radius: 11px;
-}
-
-.combination-empty {
-    color: #68778a;
-
-    font-size: 12px;
-}
-
-.combo-key {
-    min-width: 40px;
-    height: 30px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 0 9px;
-
-    color: white;
-
-    border-radius: 7px;
-
-    border: 1px solid rgba(255,255,255,.25);
-
-    box-shadow:
-        0 3px 12px rgba(0,0,0,.3);
-
-    font-size: 11px;
-    font-weight: 800;
-}
-
-.combo-key.ctrl {
-    background: linear-gradient(#60a5fa,#2563eb);
-}
-
-.combo-key.shift {
-    background: linear-gradient(#c084fc,#9333ea);
-}
-
-.combo-key.alt {
-    background: linear-gradient(#fb923c,#ea580c);
-}
-
-.combo-key.win {
-    background: linear-gradient(#f87171,#dc2626);
-}
-
-.combo-key.normal {
-    background: linear-gradient(#475569,#334155);
-}
-
-.combo-plus {
-    color: #64748b;
-
-    font-weight: 900;
-}
-
-
-/* =========================================================
-   KEYBOARD CONTAINER
-   ========================================================= */
-
-.keyboard-container {
-    width: 100%;
-
-    padding: 14px;
-
-    background: rgba(9,14,20,.97);
-
-    border: 1px solid var(--border);
-    border-radius: 15px;
-
-    box-shadow:
-        0 25px 70px rgba(0,0,0,.45);
-
-    overflow: hidden;
-}
-
-.keyboard-stage {
-    width: 100%;
-
-    position: relative;
-
-    overflow: hidden;
-}
-
-
-/*
-    Internal design width.
-
-    JavaScript scales this entire keyboard down
-    when the browser window is too narrow.
-*/
-
-.keyboard {
-    width: 1720px;
-
-    transform-origin: top left;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 7px;
-}
-
-
-/* =========================================================
-   MAIN KEYBOARD
-   ========================================================= */
-
-.keyboard-layout {
-    display: flex;
-
-    gap: 8px;
-}
-
-.main-keyboard {
-    flex: 1;
-
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 7px;
-}
-
-
-/* =========================================================
-   RIGHT CLUSTER
-   ========================================================= */
-
-.right-cluster {
-    width: 230px;
-
-    flex: 0 0 230px;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 7px;
-}
-
-
-/*
-    TOP:
-
-    Print Screen
-    Scroll Lock
-    Pause
-
-    aligned above:
-
-    Insert
-    Home
-    Page Up
-*/
-
-.navigation-top {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 7px;
-}
-
-
-/*
-    Navigation middle:
-
-    Insert | Home | Page Up
-    Delete | End  | Page Down
-*/
-
-.navigation-grid {
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    grid-template-rows:
-        repeat(2, var(--key-height));
-
-    gap: 7px;
-}
-
-
-/*
-    IMPORTANT:
-
-    Arrows are below the navigation grid.
-
-         ↑
-      ←  ↓  →
-*/
-
-.arrow-grid {
-    display: grid;
-
-    /*
-        Align the arrow block with the lower rows of the
-        main keyboard:
-
-            ArrowUp         -> same height as the Shift row
-            Left/Down/Right -> same height as the Space row
-
-        The navigation column ends at:
-            key-height + gap + (2*key-height + gridGap) + gap
-        and the Shift row of the main keyboard starts at
-            4 * (key-height + rowGap) = 4 * (60 + 7) = 268px.
-
-        In Full mode (gridGap = 7) that requires a margin of
-        67px = var(--key-height) + 7px.
-    */
-
-    margin-top:
-        calc(var(--key-height) + 7px);
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    grid-template-rows:
-        repeat(2, var(--key-height));
-
-    gap: 7px;
-}
-
-.arrow-up {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-.arrow-left {
-    grid-column: 1;
-    grid-row: 2;
-}
-
-.arrow-down {
-    grid-column: 2;
-    grid-row: 2;
-}
-
-.arrow-right {
-    grid-column: 3;
-    grid-row: 2;
-}
-
-
-/*
-    Numpad sits to the RIGHT of the arrow/navigation
-    section.
-*/
-
-.navigation-and-arrows {
-    display: flex;
-    flex-direction: column;
-
-    gap: 7px;
-}
-
-
-/* =========================================================
-   NUMPAD
-   ========================================================= */
-
-.numpad {
-    width: 290px;
-
-    flex: 0 0 290px;
-
-    /*
-        Align the numpad with the bottom of the main
-        keyboard (the Shift / Space rows) instead of the
-        top. The layout container is exactly as tall as
-        the main keyboard, so pushing the numpad to its
-        bottom shifts it down by one key height.
-    */
-
-    align-self: flex-end;
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    grid-template-rows:
-        repeat(5, var(--key-height));
-
-    gap: 7px;
-}
-
-
-/*
-    Numpad Enter and + are TWO TIMES normal height.
-*/
-
-.num-plus {
-    grid-column: 4;
-
-    grid-row: 2 / span 2;
-}
-
-.num-enter {
-    grid-column: 4;
-
-    grid-row: 4 / span 2;
-}
-
-.numpad .key.num-plus,
-.numpad .key.num-enter {
-    /*
-        The .key rule sets height: var(--key-height),
-        which would stop these two keys from filling
-        their 2-row grid cells.
-
-        Override it (with a higher-specificity selector)
-        so both grow to double height.
-    */
-
-    height: 100%;
-    min-height: 100%;
-}
-
-.num-zero {
-    grid-column: 1 / span 2;
-
-    grid-row: 5;
-}
-
-
-/* =========================================================
-   COMPACT MODE
-   ========================================================= */
-
-/*
-    Compact mode keeps all important keys but makes the
-    right-hand section narrower.
-
-    The keyboard is then scaled as a single unit.
-*/
-
-.keyboard.compact .right-cluster {
-    width: 215px;
-
-    flex-basis: 215px;
-}
-
-.keyboard.compact .numpad {
-    width: 275px;
-
-    flex-basis: 275px;
-}
-
-.keyboard.compact .keyboard-layout {
-    gap: 6px;
-}
-
-.keyboard.compact .keyboard-row,
-.keyboard.compact .navigation-top,
-.keyboard.compact .navigation-grid,
-.keyboard.compact .arrow-grid,
-.keyboard.compact .numpad {
-    gap: 5px;
-}
-
-.keyboard.compact {
-    gap: 5px;
-}
-
-
-/*
-    Full mode uses larger spacing.
-*/
-
-.keyboard.full .right-cluster {
-    width: 230px;
-
-    flex-basis: 230px;
-}
-
-.keyboard.full .numpad {
-    width: 290px;
-
-    flex-basis: 290px;
-}
-
-
-/* =========================================================
-   ROWS
-   ========================================================= */
-
-.keyboard-row {
-    display: flex;
-
-    gap: 7px;
-}
-
-
-/* =========================================================
-   KEY
-   ========================================================= */
-
-.key {
-    position: relative;
-
-    height: var(--key-height);
-
-    min-width: 0;
-
-    flex: 1;
-
-    padding: 0;
-
-    color: var(--text);
-
-    background:
-        linear-gradient(
-            180deg,
-            var(--key-top),
-            var(--key)
-        );
-
-    border: 1px solid var(--border);
-
-    border-bottom: 4px solid #151b23;
-
-    border-radius: 8px;
-
-    cursor: pointer;
-
-    user-select: none;
-
-    transition:
-        transform .06s,
-        background .08s,
-        box-shadow .08s,
-        filter .08s;
-}
-
-.key:hover {
-    background:
-        linear-gradient(
-            180deg,
-            #354255,
-            #273242
-        );
-}
-
-.key:active {
-    transform: translateY(2px);
-}
-
-
-/* =========================================================
-   WIDTHS
-   ========================================================= */
-
-.w1 {
-    flex: 1;
-}
-
-.w125 {
-    flex: 1.25;
-}
-
-.w15 {
-    flex: 1.5;
-}
-
-.w175 {
-    flex: 1.75;
-}
-
-.w2 {
-    flex: 2;
-}
-
-.w25 {
-    flex: 2.5;
-}
-
-.w6 {
-    flex: 6;
-}
-
-
-/* =========================================================
-   LETTER KEYS
-   ========================================================= */
-
-.key .english {
-    position: absolute;
-
-    top: 6px;
-    left: 8px;
-
-    font-size: 12px;
-    font-weight: 800;
-}
-
-.key .secondary {
-    position: absolute;
-
-    right: 7px;
-    bottom: 5px;
-
-    color: #9aa9bc;
-
-    font-size: 15px;
-    font-weight: 600;
-}
-
-
-/* =========================================================
-   SPECIAL KEYS
-   ========================================================= */
-
-.key.special .main-label {
-    position: absolute;
-
-    inset: 0;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 3px;
-
-    text-align: center;
-
-    font-size: 10px;
-    line-height: 1.1;
-    font-weight: 800;
-}
-
-
-/* =========================================================
-   MODIFIER COLORS
-   ========================================================= */
-
-.key.modifier-ctrl.active {
-    background:
-        linear-gradient(#60a5fa,#2563eb);
-
-    border-color: #bfdbfe;
-
-    box-shadow:
-        0 0 20px rgba(96,165,250,.9),
-        0 0 50px rgba(96,165,250,.35);
-}
-
-.key.modifier-shift.active {
-    background:
-        linear-gradient(#c084fc,#9333ea);
-
-    border-color: #e9d5ff;
-
-    box-shadow:
-        0 0 20px rgba(192,132,252,.9),
-        0 0 50px rgba(192,132,252,.35);
-}
-
-.key.modifier-alt.active {
-    background:
-        linear-gradient(#fb923c,#ea580c);
-
-    border-color: #fed7aa;
-
-    box-shadow:
-        0 0 20px rgba(251,146,60,.9),
-        0 0 50px rgba(251,146,60,.35);
-}
-
-.key.modifier-win.active {
-    background:
-        linear-gradient(#f87171,#dc2626);
-
-    border-color: #fecaca;
-
-    box-shadow:
-        0 0 20px rgba(248,113,113,.9),
-        0 0 50px rgba(248,113,113,.35);
-}
-
-
-/* =========================================================
-   NORMAL PRESSED KEY
-   ========================================================= */
-
-.key.active.normal-active {
-    background:
-        linear-gradient(
-            180deg,
-            var(--accent),
-            var(--accent-dark)
-        );
-
-    border-color: #b8fff6;
-
-    color: #00231f;
-
-    transform: translateY(2px);
-
-    box-shadow:
-        0 0 15px rgba(45,212,191,.9),
-        0 0 40px rgba(45,212,191,.55);
-}
-
-
-/* =========================================================
-   MOUSE-HELD MODIFIER
-   ========================================================= */
-
-.key.mouse-held {
-    outline:
-        2px solid rgba(255,255,255,.9);
-
-    outline-offset: -3px;
-
-    filter: brightness(1.18);
-}
-
-
-/* =========================================================
-   ANIMATION
-   ========================================================= */
-
-@keyframes keySignal {
-
-    0% {
-        filter: brightness(1);
-
-        box-shadow:
-            0 0 0 rgba(45,212,191,0);
-    }
-
-    25% {
-        filter: brightness(1.5);
-
-        box-shadow:
-            0 0 20px rgba(45,212,191,1),
-            0 0 45px rgba(45,212,191,.7);
-    }
-
-    50% {
-        filter: brightness(1);
-
-        box-shadow:
-            0 0 5px rgba(45,212,191,.4);
-    }
-
-    75% {
-        filter: brightness(1.5);
-
-        box-shadow:
-            0 0 25px rgba(45,212,191,1),
-            0 0 60px rgba(45,212,191,.7);
-    }
-
-    100% {
-        filter: brightness(1);
-    }
-}
-
-
-/* =========================================================
-   HINT
-   ========================================================= */
-
-.hint {
-    margin-top: 10px;
-
-    color: var(--muted);
-
-    font-size: 11px;
-
-    line-height: 1.6;
-}
-
-kbd {
-    padding: 2px 5px;
-
-    color: #dbe5ef;
-
-    background: #202936;
-
-    border: 1px solid var(--border);
-
-    border-radius: 4px;
-
-    font-size: 10px;
-}
-
-
-/* =========================================================
-   POPUPS
-   ========================================================= */
-
-.popup-overlay {
-    position: fixed;
-
-    inset: 0;
-
-    z-index: 1000;
-
-    display: none;
-
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    background: rgba(0,0,0,.65);
-
-    backdrop-filter: blur(6px);
-}
-
-.popup-overlay.open {
-    display: flex;
-}
-
-.popup {
-    width: min(520px,100%);
-
-    background: #151b23;
-
-    border: 1px solid var(--border);
-
-    border-radius: 14px;
-
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.6);
-}
-
-.popup-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 15px 17px;
-
-    border-bottom: 1px solid var(--border);
-}
-
-.popup-header h2 {
-    margin: 0;
-
-    font-size: 17px;
-}
-
-.popup-close {
-    width: 32px;
-    height: 32px;
-
-    color: white;
-
-    background: transparent;
-
-    border: 1px solid var(--border);
-
-    border-radius: 7px;
-
-    cursor: pointer;
-
-    font-size: 18px;
-}
-
-.popup-content {
-    padding: 17px;
-}
-
-
-/* =========================================================
-   LANGUAGE
-   ========================================================= */
-
-.language-list {
-    display: flex;
-    flex-direction: column;
-
-    gap: 8px;
-}
-
-.language-option {
-    display: flex;
-    align-items: center;
-
-    gap: 12px;
-
-    padding: 13px;
-
-    background: #202936;
-
-    border: 1px solid var(--border);
-
-    border-radius: 8px;
-
-    cursor: pointer;
-}
-
-.language-option:hover {
-    background: #293646;
-}
-
-.language-option input {
-    accent-color: var(--accent);
-}
-
-.language-code {
-    min-width: 48px;
-
-    color: var(--accent);
-
-    font-weight: 800;
-}
-
-.language-name {
-    color: var(--text);
-}
-
-
-/* =========================================================
-   SETTINGS
-   ========================================================= */
-
-.settings-window {
-    width: min(680px,100%);
-
-    max-height: 90vh;
-
-    overflow: hidden;
-
-    display: flex;
-    flex-direction: column;
-
-    background: #151b23;
-
-    border: 1px solid var(--border);
-
-    border-radius: 15px;
-
-    box-shadow:
-        0 30px 100px rgba(0,0,0,.6);
-}
-
-.settings-body {
-    display: grid;
-
-    grid-template-columns: 145px 1fr;
-
-    min-height: 400px;
-
-    overflow: hidden;
-}
-
-.settings-nav {
-    padding: 10px;
-
-    background: #10161d;
-
-    border-right: 1px solid var(--border);
-}
-
-.settings-tab {
-    width: 100%;
-
-    margin-bottom: 5px;
-
-    padding: 9px 10px;
-
-    text-align: left;
-
-    color: var(--muted);
-
-    background: transparent;
-
-    border: 1px solid transparent;
-
-    border-radius: 7px;
-
-    cursor: pointer;
-}
-
-.settings-tab.active {
-    color: var(--text);
-
-    background: #263344;
-
-    border-color: #3e5066;
-}
-
-.settings-content {
-    padding: 18px;
-
-    overflow: auto;
-}
-
-.settings-section {
-    display: none;
-}
-
-.settings-section.active {
-    display: block;
-}
-
-.settings-section h3 {
-    margin: 0 0 5px;
-}
-
-.section-description {
-    margin: 0 0 18px;
-
-    color: var(--muted);
-
-    font-size: 11px;
-}
-
-.setting-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 20px;
-
-    padding: 13px 0;
-
-    border-bottom:
-        1px solid rgba(61,75,94,.5);
-}
-
-.setting-name {
-    font-size: 12px;
-
-    font-weight: 700;
-}
-
-.setting-description {
-    margin-top: 3px;
-
-    color: var(--muted);
-
-    font-size: 10px;
-}
-
-.settings-control {
-    padding: 7px 9px;
-
-    color: var(--text);
-
-    background: #202936;
-
-    border: 1px solid var(--border);
-
-    border-radius: 7px;
-}
-
-.settings-range {
-    display: flex;
-    align-items: center;
-
-    gap: 8px;
-}
-
-.settings-range input {
-    width: 130px;
-
-    accent-color: var(--accent);
-}
-
-
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
-
-@media(max-width: 900px) {
-
-    body {
-        padding: 10px;
-    }
-
-    .title h1 {
-        font-size: 20px;
-    }
-
-    .subtitle {
-        display: none;
-    }
-
-}
-
-@media(max-width: 650px) {
-
-    .header {
-        align-items: flex-start;
-    }
-
-    .header-buttons {
-        flex-wrap: wrap;
-        justify-content: flex-end;
-    }
-
-    .settings-body {
-        grid-template-columns: 110px 1fr;
-    }
-
-    .setting-row {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-}
-</style>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 
@@ -1295,11 +23,11 @@ kbd {
 
     <div class="title">
 
-        <h1>
+        <h1 data-i18n="appTitle">
             Keyboard Visualizer
         </h1>
 
-        <div class="subtitle">
+        <div class="subtitle" data-i18n="appSubtitle">
             EN / RU keyboard for demonstrations and screen recordings
         </div>
 
@@ -1309,11 +37,25 @@ kbd {
     <div class="header-buttons">
 
 
+        <!-- RESET -->
+
+        <button
+            class="header-button reset-button"
+            id="resetButton"
+            data-i18n-title="reset"
+            aria-label="Reset"
+            title="Reset"
+        >
+            ⟲
+        </button>
+
+
         <!-- LANGUAGE -->
 
         <button
             class="header-button"
             id="languageButton"
+            data-i18n="siteLanguage"
         >
             🌐 Language
         </button>
@@ -1360,6 +102,7 @@ kbd {
         <button
             class="header-button"
             id="settingsButton"
+            data-i18n="settings"
         >
             ⚙ Settings
         </button>
@@ -1367,36 +110,6 @@ kbd {
     </div>
 
 </header>
-
-
-<!-- =========================================================
-     STATUS
-     ========================================================= -->
-
-<div class="status-bar">
-
-    <div class="status-pill">
-        Layout:
-        <strong id="modeStatus">
-            Compact
-        </strong>
-    </div>
-
-    <div class="status-pill">
-        Language:
-        <strong id="languageStatus">
-            English / Русский
-        </strong>
-    </div>
-
-    <div class="status-pill">
-        Mouse modifiers:
-        <strong id="mouseModifierStatus">
-            None
-        </strong>
-    </div>
-
-</div>
 
 
 <!-- =========================================================
@@ -1430,7 +143,7 @@ kbd {
 </div>
 
 
-<div class="hint">
+<div class="hint" data-i18n-html="hint">
 
     Physical keyboard:
     <kbd>Ctrl</kbd>
@@ -1444,6 +157,14 @@ kbd {
     then click another key.
 
     Click the modifier again to release it.
+
+</div>
+
+<div class="hint middle-hint" data-i18n-html="middleHint">
+
+    Middle mouse button:
+    click a key to keep it pressed (pulsing),
+    click it again to release.
 
 </div>
 
@@ -1463,7 +184,7 @@ kbd {
 
         <div class="popup-header">
 
-            <h2>
+            <h2 data-i18n="siteLanguageTitle">
                 🌐 Keyboard Language
             </h2>
 
@@ -1478,9 +199,19 @@ kbd {
 
         <div class="popup-content">
 
+            <!--
+                Two panels, separated by a vertical divider:
+
+                    [ site language ] | [ keyboard layout ]
+
+                Both panels are built dynamically by JS from
+                siteLanguages / keyboardLanguages so new
+                languages are added automatically.
+            -->
+
             <div
-                class="language-list"
-                id="languageList"
+                class="language-panels"
+                id="languagePanels"
             ></div>
 
         </div>
@@ -1503,7 +234,7 @@ kbd {
 
         <div class="popup-header">
 
-            <h2>
+            <h2 data-i18n="settings">
                 ⚙ Settings
             </h2>
 
@@ -1525,6 +256,7 @@ kbd {
                 <button
                     class="settings-tab active"
                     data-tab="visuals"
+                    data-i18n="visuals"
                 >
                     🎨 Visuals
                 </button>
@@ -1532,6 +264,7 @@ kbd {
                 <button
                     class="settings-tab"
                     data-tab="keyboard"
+                    data-i18n="keyboard"
                 >
                     ⌨ Keyboard
                 </button>
@@ -1551,11 +284,11 @@ kbd {
                     id="settings-visuals"
                 >
 
-                    <h3>
+                    <h3 data-i18n="visuals">
                         Visuals
                     </h3>
 
-                    <p class="section-description">
+                    <p class="section-description" data-i18n="visualsDescription">
                         Control key animations and modifier appearance.
                     </p>
 
@@ -1564,11 +297,11 @@ kbd {
 
                         <div>
 
-                            <div class="setting-name">
+                            <div class="setting-name" data-i18n="keyAnimation">
                                 Key animation
                             </div>
 
-                            <div class="setting-description">
+                            <div class="setting-description" data-i18n="keyAnimationDescription">
                                 Animate keys when pressed.
                             </div>
 
@@ -1587,11 +320,11 @@ kbd {
 
                         <div>
 
-                            <div class="setting-name">
+                            <div class="setting-name" data-i18n="flashCount">
                                 Number of flashes
                             </div>
 
-                            <div class="setting-description">
+                            <div class="setting-description" data-i18n="flashCountDescription">
                                 Number of pulses for each key.
                             </div>
 
@@ -1620,11 +353,11 @@ kbd {
 
                         <div>
 
-                            <div class="setting-name">
+                            <div class="setting-name" data-i18n="animationSpeed">
                                 Animation speed
                             </div>
 
-                            <div class="setting-description">
+                            <div class="setting-description" data-i18n="animationSpeedDescription">
                                 Speed of each pulse.
                             </div>
 
@@ -1637,11 +370,11 @@ kbd {
                                 id="animationSpeed"
                                 min="70"
                                 max="700"
-                                value="250"
+                                value="450"
                             >
 
                             <span id="animationSpeedValue">
-                                250 ms
+                                450 ms
                             </span>
 
                         </div>
@@ -1653,11 +386,68 @@ kbd {
 
                         <div>
 
-                            <div class="setting-name">
+                            <div class="setting-name" data-i18n="keyFontSize">
+                                Key font size
+                            </div>
+
+                            <div class="setting-description" data-i18n="keyFontSizeDescription">
+                                Adjust the size of the labels on the keys.
+                            </div>
+
+                        </div>
+
+                        <div class="settings-range">
+
+                            <input
+                                type="range"
+                                id="keyFontScale"
+                                min="0.5"
+                                max="2"
+                                step="0.05"
+                                value="1"
+                            >
+
+                            <span id="keyFontScaleValue">
+                                100%
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <div class="setting-name" data-i18n="showShiftSymbols">
+                                Show Shift symbols
+                            </div>
+
+                            <div class="setting-description" data-i18n="showShiftSymbolsDescription">
+                                Display the upper symbols on the number row.
+                            </div>
+
+                        </div>
+
+                        <input
+                            type="checkbox"
+                            id="showShiftSymbols"
+                            checked
+                        >
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <div class="setting-name" data-i18n="mouseModifierMode">
                                 Mouse modifier mode
                             </div>
 
-                            <div class="setting-description">
+                            <div class="setting-description" data-i18n="mouseModifierDescription">
                                 Click Ctrl / Shift / Alt / Win to hold it.
                             </div>
 
@@ -1699,11 +489,11 @@ kbd {
 
                         <div>
 
-                            <div class="setting-name">
+                            <div class="setting-name" data-i18n="combinationDisplay">
                                 Combination display
                             </div>
 
-                            <div class="setting-description">
+                            <div class="setting-description" data-i18n="combinationDescription">
                                 Show Ctrl + Shift + Key above keyboard.
                             </div>
 
@@ -1713,6 +503,28 @@ kbd {
                             type="checkbox"
                             id="showCombination"
                             checked
+                        >
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <div class="setting-name" data-i18n="overlayMode">
+                                Overlay mode
+                            </div>
+
+                            <div class="setting-description" data-i18n="overlayModeDescription">
+                                Transparent background for use as an overlay.
+                            </div>
+
+                        </div>
+
+                        <input
+                            type="checkbox"
+                            id="overlayMode"
                         >
 
                     </div>
@@ -1729,11 +541,11 @@ kbd {
                     id="settings-keyboard"
                 >
 
-                    <h3>
+                    <h3 data-i18n="keyboard">
                         Keyboard
                     </h3>
 
-                    <p class="section-description">
+                    <p class="section-description" data-i18n="keyboardDescription">
                         Keyboard behavior and sizing.
                     </p>
 
@@ -1742,11 +554,11 @@ kbd {
 
                         <div>
 
-                            <div class="setting-name">
+                            <div class="setting-name" data-i18n="automaticSizing">
                                 Automatic sizing
                             </div>
 
-                            <div class="setting-description">
+                            <div class="setting-description" data-i18n="automaticSizingDescription">
                                 Scale the keyboard to fit the available window.
                             </div>
 
@@ -1772,129 +584,16 @@ kbd {
 </div>
 
 
+<!--
+    Keyboard layout languages and site translations come from
+    the external languages.js (keyboardLanguages / siteLanguages).
+    Loading it here, before the app script, makes both globals
+    available inside the inline script below.
+-->
+
+<script src="languages.js"></script>
+
 <script>
-
-/* ============================================================
-   LANGUAGE DATA
-   ============================================================ */
-
-const languages = {
-
-    enru: {
-
-        name: "English / Русский",
-        shortName: "EN / RU",
-
-        secondary: {
-
-            Backquote: "ё",
-
-            KeyQ: "й",
-            KeyW: "ц",
-            KeyE: "у",
-            KeyR: "к",
-            KeyT: "е",
-            KeyY: "н",
-            KeyU: "г",
-            KeyI: "ш",
-            KeyO: "щ",
-            KeyP: "з",
-
-            BracketLeft: "х",
-            BracketRight: "ъ",
-
-            KeyA: "ф",
-            KeyS: "ы",
-            KeyD: "в",
-            KeyF: "а",
-            KeyG: "п",
-            KeyH: "р",
-            KeyJ: "о",
-            KeyK: "л",
-            KeyL: "д",
-
-            Semicolon: "ж",
-            Quote: "э",
-
-            KeyZ: "я",
-            KeyX: "ч",
-            KeyC: "с",
-            KeyV: "м",
-            KeyB: "и",
-            KeyN: "т",
-            KeyM: "ь",
-
-            Comma: "б",
-            Period: "ю"
-
-        }
-
-    },
-
-
-    en: {
-
-        name: "English",
-        shortName: "EN",
-
-        secondary: {}
-
-    },
-
-
-    ru: {
-
-        name: "Русский",
-        shortName: "RU",
-
-        secondary: {
-
-            Backquote: "ё",
-
-            KeyQ: "й",
-            KeyW: "ц",
-            KeyE: "у",
-            KeyR: "к",
-            KeyT: "е",
-            KeyY: "н",
-            KeyU: "г",
-            KeyI: "ш",
-            KeyO: "щ",
-            KeyP: "з",
-
-            BracketLeft: "х",
-            BracketRight: "ъ",
-
-            KeyA: "ф",
-            KeyS: "ы",
-            KeyD: "в",
-            KeyF: "а",
-            KeyG: "п",
-            KeyH: "р",
-            KeyJ: "о",
-            KeyK: "л",
-            KeyL: "д",
-
-            Semicolon: "ж",
-            Quote: "э",
-
-            KeyZ: "я",
-            KeyX: "ч",
-            KeyC: "с",
-            KeyV: "м",
-            KeyB: "и",
-            KeyN: "т",
-            KeyM: "ь",
-
-            Comma: "б",
-            Period: "ю"
-
-        }
-
-    }
-
-};
-
 
 /* ============================================================
    KEYBOARD ROWS
@@ -2099,14 +798,6 @@ const keyboardStage =
 const combinationDisplay =
     document.getElementById("combinationDisplay");
 
-const modeStatus =
-    document.getElementById("modeStatus");
-
-const languageStatus =
-    document.getElementById("languageStatus");
-
-const mouseModifierStatus =
-    document.getElementById("mouseModifierStatus");
 
 
 /* ============================================================
@@ -2139,6 +830,15 @@ const mouseModifiers = {
 
 
 let lastNormalKey = null;
+
+
+/*
+    Keys currently in an infinite pulsing loop (started by
+    middle click). They are shown in the combination display
+    while active and disappear when the loop is stopped.
+*/
+
+const loopedKeys = new Set();
 
 
 /*
@@ -2218,6 +918,15 @@ const animationSpeed =
 const animationSpeedValue =
     document.getElementById("animationSpeedValue");
 
+const keyFontScale =
+    document.getElementById("keyFontScale");
+
+const keyFontScaleValue =
+    document.getElementById("keyFontScaleValue");
+
+const showShiftSymbols =
+    document.getElementById("showShiftSymbols");
+
 const mouseModifierMode =
     document.getElementById("mouseModifierMode");
 
@@ -2229,6 +938,9 @@ const showCombination =
 
 const autoFit =
     document.getElementById("autoFit");
+
+const overlayMode =
+    document.getElementById("overlayMode");
 
 
 /* ============================================================
@@ -2325,8 +1037,8 @@ function updateModifierVisuals() {
 
 
                                 const physicalActive =
-                                    physicalModifier ===
-                                    modifier &&
+                                    key.dataset.physicalModifier ===
+                                    "true" &&
                                     physicalModifiers[modifier];
 
 
@@ -2363,41 +1075,11 @@ function updateModifierVisuals() {
         );
 
 
-    updateMouseModifierStatus();
-
     updateCombinationDisplay();
 
 }
 
 
-/* ============================================================
-   MOUSE MODIFIER STATUS
-   ============================================================ */
-
-function updateMouseModifierStatus() {
-
-    const active =
-        Object.keys(mouseModifiers)
-            .filter(
-                modifier =>
-                    mouseModifiers[modifier]
-            );
-
-
-    mouseModifierStatus.textContent =
-
-        active.length
-
-            ? active
-                .map(
-                    modifier =>
-                        modifierInfo[modifier].label
-                )
-                .join(" + ")
-
-            : "None";
-
-}
 
 
 /* ============================================================
@@ -2441,9 +1123,31 @@ function updateCombinationDisplay() {
         );
 
 
+    /*
+        Normal keys shown in the combo: the last clicked
+        key plus every key that is currently looping.
+    */
+
+    const normalKeys =
+        [];
+
+    if (lastNormalKey) {
+        normalKeys.push(
+            lastNormalKey
+        );
+    }
+
+    loopedKeys.forEach(
+        key =>
+            normalKeys.push(
+                key.dataset.label
+            )
+    );
+
+
     if (
         modifiers.length === 0 &&
-        !lastNormalKey
+        normalKeys.length === 0
     ) {
 
         const empty =
@@ -2453,11 +1157,13 @@ function updateCombinationDisplay() {
             "combination-empty";
 
         empty.textContent =
-            "No key combination";
+            t("noCombination");
 
         combinationDisplay.appendChild(
             empty
         );
+
+        appendComboClose();
 
         return;
 
@@ -2481,19 +1187,69 @@ function updateCombinationDisplay() {
     );
 
 
-    if (lastNormalKey) {
+    normalKeys.forEach(
+        (label,index) => {
 
-        if (modifiers.length) {
-            addPlus();
+            if (
+                index > 0 ||
+                modifiers.length
+            ) {
+                addPlus();
+            }
+
+
+            addBadge(
+                label,
+                "normal"
+            );
+
         }
+    );
+
+    appendComboClose();
+
+}
 
 
-        addBadge(
-            lastNormalKey,
-            "normal"
-        );
+/*
+    Close button for the combination display. Visible only
+    while hovering over the combo window; clicking it disables
+    the combination display (mirrors the settings checkbox).
+*/
+function appendComboClose() {
 
-    }
+    const close =
+        document.createElement("button");
+
+    close.type =
+        "button";
+
+    close.className =
+        "combo-close";
+
+    close.setAttribute(
+        "aria-label",
+        "Close"
+    );
+
+    close.textContent =
+        "✕";
+
+    close.addEventListener(
+        "click",
+        () => {
+
+            showCombination.checked =
+                false;
+
+            updateCombinationDisplay();
+
+        }
+    );
+
+    combinationDisplay.appendChild(
+        close
+    );
 
 }
 
@@ -2652,9 +1408,40 @@ function createKey(
         );
 
 
-        const secondary =
-            languages[currentLanguage]
+        const langSecondary =
+            keyboardLanguages[currentLanguage]
                 ?.secondary?.[code];
+
+
+        /*
+            Upper symbols reachable with Shift on the number
+            row. Shown as secondary labels when the setting
+            is enabled.
+        */
+
+        const shiftSymbols = {
+            Digit1: "!",
+            Digit2: "@",
+            Digit3: "#",
+            Digit4: "$",
+            Digit5: "%",
+            Digit6: "^",
+            Digit7: "&",
+            Digit8: "*",
+            Digit9: "(",
+            Digit0: ")",
+            Minus: "_",
+            Equal: "+"
+        };
+
+
+        const secondary =
+            langSecondary ||
+            (
+                showShiftSymbols.checked
+                    ? shiftSymbols[code]
+                    : undefined
+            );
 
 
         if (secondary) {
@@ -2693,10 +1480,41 @@ function createKey(
 
     key.addEventListener(
         "click",
-        () => {
+        event => {
 
-            handleMouseKey(
-                key
+            if (event.button !== 0) {
+                return;
+            }
+
+            activateKey(
+                key,
+                "mouse"
+            );
+
+        }
+    );
+
+
+    /*
+        Middle click (auxclick, button 1) toggles an
+        infinite pulsing loop on the key.
+    */
+
+    key.addEventListener(
+        "auxclick",
+        event => {
+
+            if (
+                event.button !== 1
+            ) {
+                return;
+            }
+
+            event.preventDefault();
+
+            activateKey(
+                key,
+                "middle"
             );
 
         }
@@ -2722,7 +1540,7 @@ function createMainKeyboard() {
 
 
     mainRows.forEach(
-        rowData => {
+        (rowData,rowIndex) => {
 
             const row =
                 document.createElement("div");
@@ -2744,6 +1562,46 @@ function createMainKeyboard() {
 
                 }
             );
+
+
+            /*
+                Overlay settings gear, placed to the right of
+                F12 (the last key of the top row). Only shown
+                in overlay mode so the mode can be turned off.
+            */
+            if (rowIndex === 0) {
+
+                const gear =
+                    document.createElement("button");
+
+                gear.type =
+                    "button";
+
+                gear.className =
+                    "overlay-settings-button";
+
+                gear.title =
+                    t("settings");
+
+                gear.textContent =
+                    "⚙";
+
+                gear.addEventListener(
+                    "click",
+                    () => {
+
+                        settingsOverlay.classList.add(
+                            "open"
+                        );
+
+                    }
+                );
+
+                row.appendChild(
+                    gear
+                );
+
+            }
 
 
             main.appendChild(
@@ -3050,6 +1908,8 @@ function fitKeyboard() {
         keyboardStage.style.height =
             keyboard.offsetHeight + "px";
 
+        syncComboWidth();
+
         return;
 
     }
@@ -3085,6 +1945,34 @@ function fitKeyboard() {
     keyboardStage.style.height =
         `${keyboard.offsetHeight * scale}px`;
 
+    syncComboWidth();
+
+}
+
+
+/*
+    In overlay mode the combination display should span the
+    same width as the (scaled) keyboard so the combo window
+    sits directly above the keys.
+*/
+function syncComboWidth() {
+
+    if (overlayMode.checked) {
+
+        const width =
+            keyboard.getBoundingClientRect().width;
+
+        combinationDisplay.style.width =
+            width ? width + "px" : "";
+
+    }
+    else {
+
+        combinationDisplay.style.width =
+            "";
+
+    }
+
 }
 
 
@@ -3112,20 +2000,77 @@ if ("ResizeObserver" in window) {
    MOUSE INPUT
    ============================================================ */
 
-function handleMouseKey(key) {
+/*
+    Single activation entry point for every key.
+
+    source may be:
+        "keyboard" - physical key press
+        "mouse"    - left mouse button
+        "middle"   - middle mouse button (wheel click)
+
+    Routing it through one function avoids double-triggering
+    a single key from different input paths.
+*/
+
+function activateKey(key, source) {
 
     const modifier =
         key.dataset.modifier;
 
+    /*
+        MIDDLE CLICK: toggle the infinite pulsing loop.
+
+        First disable any previous left-button activation so a
+        still-flashing normal key does not linger in the
+        combination display alongside the middle-click loop.
+    */
+    if (source === "middle") {
+
+        lastNormalKey =
+            null;
+
+        /*
+            Modifiers behave the same as the left button:
+            toggle the latched modifier so it shows its
+            color in the combination display.
+        */
+        if (
+            modifier &&
+            mouseModifierMode.checked
+        ) {
+
+            mouseModifiers[modifier] =
+                !mouseModifiers[modifier];
+
+            key.dataset.mouseModifier =
+                mouseModifiers[modifier]
+                    ? "true"
+                    : "false";
+
+            updateModifierVisuals();
+
+        }
+        else {
+
+            toggleKeyLoop(
+                key
+            );
+
+        }
+
+        return;
+
+    }
+
 
     /*
-        MODIFIER CLICK
+        MOUSE MODIFIERS LATCH
 
-        Ctrl / Shift / Alt / Win are latching
-        in mouse mode.
+        Ctrl / Shift / Alt / Win clicked with the left
+        button are latching in mouse mode.
     */
-
     if (
+        source === "mouse" &&
         modifier &&
         mouseModifierMode.checked
     ) {
@@ -3133,21 +2078,13 @@ function handleMouseKey(key) {
         mouseModifiers[modifier] =
             !mouseModifiers[modifier];
 
-
-        /*
-            Mark only THIS particular physical
-            modifier key as mouse-held.
-        */
-
         key.dataset.mouseModifier =
             mouseModifiers[modifier]
                 ? "true"
                 : "false";
 
-
         lastNormalKey =
             null;
-
 
         updateModifierVisuals();
 
@@ -3157,19 +2094,34 @@ function handleMouseKey(key) {
 
 
     /*
-        NORMAL CLICK
-
-        Never stays pressed.
+        KEYBOARD MODIFIERS are tracked through
+        physicalModifiers in the keydown handler, so no
+        further action is needed here.
     */
+    if (modifier) {
+        return;
+    }
+
+
+    /*
+        NORMAL KEY: flash it and remember it for the
+        combination display.
+
+        If the key is already held via middle-click, an LMB
+        click must not cancel the loop or reset its state,
+        otherwise the next MMB click would re-start the loop
+        instead of stopping it. Leave the loop running.
+    */
+    if (key._looping) {
+        return;
+    }
 
     lastNormalKey =
         key.dataset.label;
 
-
     flashKey(
         key
     );
-
 
     updateCombinationDisplay();
 
@@ -3181,6 +2133,22 @@ function handleMouseKey(key) {
    ============================================================ */
 
 function flashKey(key) {
+
+    /*
+        If the key is already held via middle-click, do not
+        cancel its loop or reset its state; a single flash
+        must not disturb an active pulsing loop.
+    */
+    if (key._looping) {
+        return;
+    }
+
+    key._looping =
+        false;
+
+    loopedKeys.delete(
+        key
+    );
 
     key.classList.remove(
         "active",
@@ -3220,6 +2188,14 @@ function flashKey(key) {
                         "active",
                         "normal-active"
                     );
+
+                    if (
+                        !key._looping &&
+                        lastNormalKey === key.dataset.label
+                    ) {
+                        lastNormalKey = null;
+                        updateCombinationDisplay();
+                    }
 
                 },
                 180
@@ -3270,9 +2246,101 @@ function flashKey(key) {
                 key.style.animation =
                     "";
 
+                if (
+                    !key._looping &&
+                    lastNormalKey === key.dataset.label
+                ) {
+                    lastNormalKey = null;
+                    updateCombinationDisplay();
+                }
+
             },
             count * speed + 80
         );
+
+}
+
+
+/* ============================================================
+   LOOPING KEY (MIDDLE CLICK)
+   ============================================================ */
+
+/*
+    Middle-click a key to start an infinite pulsing loop.
+    Middle-click the same key again to stop the loop
+    immediately.
+*/
+
+function toggleKeyLoop(key) {
+
+    if (key._looping) {
+
+        stopKeyLoop(key);
+
+    }
+    else {
+
+        startKeyLoop(key);
+
+    }
+
+}
+
+
+function startKeyLoop(key) {
+
+    key._looping =
+        true;
+
+    loopedKeys.add(
+        key
+    );
+
+    key.classList.add(
+        "active",
+        "normal-active"
+    );
+
+
+    const speed =
+        Number(
+            animationSpeed.value
+        );
+
+
+    key.style.animation =
+        `keySignal ${speed}ms ease-in-out 0s infinite`;
+
+
+    clearTimeout(
+        key._releaseTimer
+    );
+
+
+    updateCombinationDisplay();
+
+}
+
+
+function stopKeyLoop(key) {
+
+    key._looping =
+        false;
+
+    loopedKeys.delete(
+        key
+    );
+
+    key.classList.remove(
+        "active",
+        "normal-active"
+    );
+
+    key.style.animation =
+        "";
+
+
+    updateCombinationDisplay();
 
 }
 
@@ -3348,16 +2416,10 @@ document.addEventListener(
         event.preventDefault();
 
 
-        lastNormalKey =
-            key.dataset.label;
-
-
-        flashKey(
-            key
+        activateKey(
+            key,
+            "keyboard"
         );
-
-
-        updateCombinationDisplay();
 
     }
 );
@@ -3521,120 +2583,379 @@ const closeLanguage =
         "closeLanguage"
     );
 
-const languageList =
+const languagePanels =
     document.getElementById(
-        "languageList"
+        "languagePanels"
     );
 
 
+/*
+    Site language (for the interface). Independent from the
+    keyboard layout language.
+*/
+
+let currentSiteLanguage =
+    "en";
+
+
+/*
+    Detect the user's preferred language from the browser
+    and map it to an available site language.
+
+    - exact match first (e.g. "ru" -> ru)
+    - then the base language (e.g. "ru-RU" -> ru)
+    - fall back to English when the language is not present
+      on the site.
+*/
+
+function detectSiteLanguage() {
+
+    const candidates = [
+        navigator.language,
+        ...(navigator.languages || [])
+    ];
+
+    for (const raw of candidates) {
+
+        if (!raw) {
+            continue;
+        }
+
+        const lang =
+            String(raw).toLowerCase();
+
+        if (siteLanguages[lang]) {
+            return lang;
+        }
+
+        const base =
+            lang.split("-")[0];
+
+        if (siteLanguages[base]) {
+            return base;
+        }
+
+    }
+
+    return "en";
+
+}
+
+
+/*
+    Return the translation string for the current site
+    language, or an empty string when missing.
+*/
+
+function t(key) {
+
+    return (
+        siteLanguages[currentSiteLanguage]
+            ?.translations?.[key] ?? ""
+    );
+
+}
+
+
+/*
+    Apply the current site language to every element that
+    carries a data-i18n attribute, plus the dynamic texts
+    (document title and layout menu).
+*/
+
+function applySiteLanguage() {
+
+    document
+        .querySelectorAll("[data-i18n]")
+        .forEach(el => {
+
+            const value =
+                t(el.dataset.i18n);
+
+            if (value) {
+                el.textContent = value;
+            }
+
+        });
+
+
+    /*
+        Elements that contain markup (e.g. the hint with <kbd>
+        tags) are translated via innerHTML using data-i18n-html.
+    */
+
+    document
+        .querySelectorAll("[data-i18n-html]")
+        .forEach(el => {
+
+            const value =
+                t(el.dataset.i18nHtml);
+
+            if (value) {
+                el.innerHTML = value;
+            }
+
+        });
+
+
+    /*
+        Elements whose tooltip (title attribute) needs
+        translating use data-i18n-title.
+    */
+
+    document
+        .querySelectorAll("[data-i18n-title]")
+        .forEach(el => {
+
+            const value =
+                t(el.dataset.i18nTitle);
+
+            if (value) {
+                el.title = value;
+            }
+
+        });
+
+
+    document.title =
+        t("appTitle") || "Keyboard Visualizer";
+
+
+    const layoutName =
+        currentLayout === "compact"
+            ? t("compact")
+            : t("full");
+
+    layoutButton.textContent =
+        "⌨ " + layoutName + " ▾";
+
+
+    document
+        .querySelectorAll(".layout-option")
+        .forEach(option => {
+
+            const value =
+                t(option.dataset.layout);
+
+            if (value) {
+                option.textContent = value;
+            }
+
+        });
+
+}
+
+
+/*
+    Build the two-panel language menu.
+
+        Left  panel: site language  (from siteLanguages)
+        Right panel: keyboard layout (from keyboardLanguages)
+
+    Both panels are generated from the data objects, so any
+    language added later to languages.js appears automatically.
+*/
+
 function buildLanguageList() {
 
-    languageList.innerHTML =
+    languagePanels.innerHTML =
         "";
 
 
-    Object.entries(languages)
+    /*
+        LEFT: site language
+    */
+
+    const sitePanel =
+        document.createElement("div");
+
+    const siteTitle =
+        document.createElement("div");
+
+    siteTitle.className =
+        "language-panel-title";
+
+    siteTitle.textContent =
+        t("siteLanguage");
+
+    sitePanel.appendChild(
+        siteTitle
+    );
+
+
+    Object.entries(siteLanguages)
         .forEach(
             ([id,language]) => {
 
-                const label =
-                    document.createElement(
-                        "label"
-                    );
-
-                label.className =
-                    "language-option";
-
-
-                const radio =
-                    document.createElement(
-                        "input"
-                    );
-
-                radio.type =
-                    "radio";
-
-                radio.name =
-                    "keyboardLanguage";
-
-                radio.value =
-                    id;
-
-                radio.checked =
-                    id === currentLanguage;
-
-
-                const code =
-                    document.createElement(
-                        "span"
-                    );
-
-                code.className =
-                    "language-code";
-
-                code.textContent =
-                    language.shortName;
-
-
-                const name =
-                    document.createElement(
-                        "span"
-                    );
-
-                name.className =
-                    "language-name";
-
-                name.textContent =
-                    language.name;
-
-
-                label.appendChild(
-                    radio
-                );
-
-                label.appendChild(
-                    code
-                );
-
-                label.appendChild(
-                    name
-                );
-
-
-                radio.addEventListener(
-                    "change",
-                    () => {
-
-                        if (!radio.checked) {
-                            return;
+                sitePanel.appendChild(
+                    createLanguageOption({
+                        name: "siteLanguage",
+                        id,
+                        language,
+                        checked: id === currentSiteLanguage,
+                        onChange: () => {
+                            currentSiteLanguage = id;
+                            applySiteLanguage();
+                            buildLanguageList();
                         }
-
-
-                        currentLanguage =
-                            id;
-
-
-                        languageStatus.textContent =
-                            language.name;
-
-
-                        buildKeyboard();
-
-
-                        languageOverlay.classList.remove(
-                            "open"
-                        );
-
-                    }
-                );
-
-
-                languageList.appendChild(
-                    label
+                    })
                 );
 
             }
         );
+
+
+    /*
+        Vertical divider.
+    */
+
+    const divider =
+        document.createElement("div");
+
+    divider.className =
+        "language-divider";
+
+
+    /*
+        RIGHT: keyboard layout
+    */
+
+    const keyboardPanel =
+        document.createElement("div");
+
+    const keyboardTitle =
+        document.createElement("div");
+
+    keyboardTitle.className =
+        "language-panel-title";
+
+    keyboardTitle.textContent =
+        t("keyboardLayout");
+
+    keyboardPanel.appendChild(
+        keyboardTitle
+    );
+
+
+    Object.entries(keyboardLanguages)
+        .forEach(
+            ([id,language]) => {
+
+                keyboardPanel.appendChild(
+                    createLanguageOption({
+                        name: "keyboardLanguage",
+                        id,
+                        language,
+                        checked: id === currentLanguage,
+                        onChange: () => {
+                            currentLanguage = id;
+                            buildKeyboard();
+                        }
+                    })
+                );
+
+            }
+        );
+
+
+    languagePanels.appendChild(
+        sitePanel
+    );
+
+    languagePanels.appendChild(
+        divider
+    );
+
+    languagePanels.appendChild(
+        keyboardPanel
+    );
+
+}
+
+
+/*
+    Create a single radio-style language row.
+*/
+
+function createLanguageOption({
+    name,
+    id,
+    language,
+    checked,
+    onChange
+}) {
+
+    const label =
+        document.createElement("label");
+
+    label.className =
+        "language-option";
+
+
+    const radio =
+        document.createElement("input");
+
+    radio.type =
+        "radio";
+
+    radio.name =
+        name;
+
+    radio.value =
+        id;
+
+    radio.checked =
+        checked;
+
+
+    const code =
+        document.createElement("span");
+
+    code.className =
+        "language-code";
+
+    code.textContent =
+        language.shortName;
+
+
+    const langName =
+        document.createElement("span");
+
+    langName.className =
+        "language-name";
+
+    langName.textContent =
+        language.name;
+
+
+    label.appendChild(
+        radio
+    );
+
+    label.appendChild(
+        code
+    );
+
+    label.appendChild(
+        langName
+    );
+
+
+    radio.addEventListener(
+        "change",
+        () => {
+
+            if (!radio.checked) {
+                return;
+            }
+
+            onChange();
+
+        }
+    );
+
+
+    return label;
 
 }
 
@@ -3836,6 +3157,35 @@ animationSpeed.addEventListener(
 );
 
 
+keyFontScale.addEventListener(
+    "input",
+    () => {
+
+        const scale =
+            Number(keyFontScale.value);
+
+        document.documentElement.style.setProperty(
+            "--key-font-scale",
+            scale
+        );
+
+        keyFontScaleValue.textContent =
+            Math.round(scale * 100) + "%";
+
+    }
+);
+
+
+showShiftSymbols.addEventListener(
+    "change",
+    () => {
+
+        buildKeyboard();
+
+    }
+);
+
+
 showCombination.addEventListener(
     "change",
     updateCombinationDisplay
@@ -3916,16 +3266,12 @@ function setLayout(layout) {
         `keyboard ${layout}`;
 
 
-    modeStatus.textContent =
-        layout === "compact"
-            ? "Compact"
-            : "Full";
-
-
     layoutButton.textContent =
-        layout === "compact"
-            ? "⌨ Compact ▾"
-            : "⌨ Full ▾";
+        "⌨ " +
+        (layout === "compact"
+            ? t("compact")
+            : t("full")) +
+        " ▾";
 
 
     document
@@ -4022,20 +3368,146 @@ autoFit.addEventListener(
 
 
 /* ============================================================
+   OVERLAY MODE
+   ============================================================ */
+
+/*
+    Toggle the "overlay-mode" class on the body. In overlay
+    mode the page background, container frame and padding are
+    removed so the keyboard can be layered over other content
+    (e.g. in OBS as a transparent browser source).
+*/
+
+function applyOverlayMode() {
+
+    document.body.classList.toggle(
+        "overlay-mode",
+        overlayMode.checked
+    );
+
+    syncComboWidth();
+
+}
+
+overlayMode.addEventListener(
+    "change",
+    applyOverlayMode
+);
+
+applyOverlayMode();
+
+
+/* ============================================================
+   RESET BUTTON
+   ============================================================ */
+
+const resetButton =
+    document.getElementById(
+        "resetButton"
+    );
+
+
+/*
+    Reset the state of every key and clear the combination
+    display.
+*/
+
+function resetAll() {
+
+    // Stop every looping key.
+    loopedKeys.forEach(
+        key => {
+            key._looping = false;
+            key.classList.remove(
+                "active",
+                "normal-active"
+            );
+            key.style.animation = "";
+            clearTimeout(
+                key._releaseTimer
+            );
+        }
+    );
+    loopedKeys.clear();
+
+
+    // Clear the last normal key.
+    lastNormalKey = null;
+
+
+    // Release every physical and mouse modifier.
+    Object.keys(physicalModifiers)
+        .forEach(
+            modifier =>
+                physicalModifiers[modifier] = false
+        );
+
+    Object.keys(mouseModifiers)
+        .forEach(
+            modifier =>
+                mouseModifiers[modifier] = false
+        );
+
+
+    // Clear all visual key state.
+    document
+        .querySelectorAll(".key")
+        .forEach(key => {
+
+            key.dataset.mouseModifier =
+                "false";
+
+            key.dataset.physicalModifier =
+                "false";
+
+            key.classList.remove(
+                "active",
+                "normal-active",
+                "mouse-held"
+            );
+
+            key.style.animation =
+                "";
+
+            key._looping =
+                false;
+
+            clearTimeout(
+                key._releaseTimer
+            );
+
+        });
+
+
+    updateModifierVisuals();
+    updateCombinationDisplay();
+
+}
+
+
+resetButton.addEventListener(
+    "click",
+    resetAll
+);
+
+
+/* ============================================================
    INITIALIZATION
    ============================================================ */
 
-modeStatus.textContent =
-    "Compact";
+currentSiteLanguage =
+    detectSiteLanguage();
 
-languageStatus.textContent =
-    languages[currentLanguage].name;
+applySiteLanguage();
 
 flashCountValue.textContent =
     flashCount.value;
 
 animationSpeedValue.textContent =
     animationSpeed.value + " ms";
+
+keyFontScaleValue.textContent =
+    Math.round(Number(keyFontScale.value) * 100) + "%";
 
 
 buildLanguageList();

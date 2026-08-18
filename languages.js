@@ -71,58 +71,6 @@ const keyboardLanguages = {
 
         secondary: {}
 
-    },
-
-
-    ru: {
-
-        name: "Русский",
-        shortName: "RU",
-
-        secondary: {
-
-            Backquote: "ё",
-
-            KeyQ: "й",
-            KeyW: "ц",
-            KeyE: "у",
-            KeyR: "к",
-            KeyT: "е",
-            KeyY: "н",
-            KeyU: "г",
-            KeyI: "ш",
-            KeyO: "щ",
-            KeyP: "з",
-
-            BracketLeft: "х",
-            BracketRight: "ъ",
-
-            KeyA: "ф",
-            KeyS: "ы",
-            KeyD: "в",
-            KeyF: "а",
-            KeyG: "п",
-            KeyH: "р",
-            KeyJ: "о",
-            KeyK: "л",
-            KeyL: "д",
-
-            Semicolon: "ж",
-            Quote: "э",
-
-            KeyZ: "я",
-            KeyX: "ч",
-            KeyC: "с",
-            KeyV: "м",
-            KeyB: "и",
-            KeyN: "т",
-            KeyM: "ь",
-
-            Comma: "б",
-            Period: "ю"
-
-        }
-
     }
 
 };
@@ -165,7 +113,7 @@ const siteLanguages = {
                 "EN / RU keyboard for demonstrations and screen recordings",
 
             siteLanguage:
-                "Language",
+                "🌐 Language",
 
             keyboardLayout:
                 "Layout",
@@ -218,6 +166,18 @@ const siteLanguages = {
             animationSpeedDescription:
                 "Speed of each pulse.",
 
+            keyFontSize:
+                "Key font size",
+
+            keyFontSizeDescription:
+                "Adjust the size of the labels on the keys.",
+
+            showShiftSymbols:
+                "Show Shift symbols",
+
+            showShiftSymbolsDescription:
+                "Display the upper symbols on the number row.",
+
             mouseModifierMode:
                 "Mouse modifier mode",
 
@@ -252,10 +212,19 @@ const siteLanguages = {
                 "Reset pressed keys",
 
             hint:
-                "Physical keyboard: Ctrl / Shift / Alt / Win + key. Mouse mode: click a modifier to hold it, then click another key.",
+                "For key-combinations press Ctrl / Shift / Alt / Win + key OR click Ctrl / Shift / Alt / Win to hold it, then click another key.",
+
+            middleHint:
+                "Middle mouse button: click a key to keep it pressed (pulsing), click it again to release.",
+
+            overlayMode:
+                "Overlay mode",
+
+            overlayModeDescription:
+                "Transparent background for use as an overlay.",
 
             noCombination:
-                "No key combination"
+                "Pressed buttons will appear here"
 
         }
 
@@ -276,7 +245,7 @@ const siteLanguages = {
                 "Клавиатура EN / RU для демонстраций и записи экрана",
 
             siteLanguage:
-                "Язык",
+                "🌐 Язык",
 
             keyboardLayout:
                 "Раскладка",
@@ -300,7 +269,7 @@ const siteLanguages = {
                 "⌨ Раскладка клавиатуры",
 
             visuals:
-                "🎨 Визуальные",
+                "🎨 Внешний вид",
 
             keyboard:
                 "⌨ Клавиатура",
@@ -312,34 +281,46 @@ const siteLanguages = {
                 "Настройка поведения клавиатуры.",
 
             keyAnimation:
-                "Анимация клавиши",
+                "Пульсация клавиш",
 
             keyAnimationDescription:
-                "Анимировать клавиши при нажатии.",
+                "Включить пульсацию клавиш при нажатии.",
 
             flashCount:
                 "Количество вспышек",
 
             flashCountDescription:
-                "Количество пульсаций для каждой кнопки.",
+                "Количество вспышек пульсации.",
 
             animationSpeed:
-                "Скорость анимации",
+                "Скорость пульсации",
 
             animationSpeedDescription:
-                "Скорость каждого пульса.",
+                "Время между вспышками пульсации.",
+
+            keyFontSize:
+                "Размер шрифта клавиш",
+
+            keyFontSizeDescription:
+                "Настройка размера подписей на клавишах.",
+
+            showShiftSymbols:
+                "Показывать символы Shift",
+
+            showShiftSymbolsDescription:
+                "Отображать верхние символы на ряду цифр.",
 
             mouseModifierMode:
-                "Mouse modifier mode",
+                "Режим зажатых Ctrl / Shift / Alt / Win",
 
             mouseModifierDescription:
                 "Оставлять кликнутые Ctrl / Shift / Alt / Win нажатыми.",
 
             combinationDisplay:
-                "Отображать комбинации",
+                "Отображать комбинацию клавиш",
 
             combinationDescription:
-                "Отображать текущую комбинацию клавиш над клавиатурой.",
+                "Отображать одновременно нажатые клавиши в панели над клавиатурой.",
 
             keyboardMode:
                 "Режим клавиатуры",
@@ -360,13 +341,22 @@ const siteLanguages = {
                 "Полный",
 
             reset:
-                "Сбросить все клавиши.",
+                "Сбросить все нажатые клавиши",
 
             hint:
-                "Зажмите на своей клавиатуре Ctrl / Shift / Alt / Win и нажмите кнопку ИЛИ щелкните Ctrl / Shift / Alt / Win, чтобы их зажать, а затем нажмите другую клавишу.",
+                "Для комбинаций клавиш: зажмите на своей клавиатуре Ctrl / Shift / Alt / Win и нажмите любую кнопку ИЛИ щелкните Ctrl / Shift / Alt / Win, чтобы их зажать, а затем нажмите другую клавишу.",
+
+            middleHint:
+                "Средняя кнопка мыши: щелкните клавишу, чтобы удерживать её нажатой (пульсация), щелкните ещё раз, чтобы отпустить.",
+
+            overlayMode:
+                "Режим оверлея",
+
+            overlayModeDescription:
+                "Прозрачный фон для использования поверх изображения.",
 
             noCombination:
-                "Нет комбинации клавиш"
+                "Нажатые кнопки появятся здесь"
 
         }
     }

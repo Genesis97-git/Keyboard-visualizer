@@ -1,0 +1,1457 @@
+:root {
+    --bg: #090d12;
+    --panel: #151b23;
+    --keyboard: #0d131a;
+
+    --key: #202936;
+    --key-top: #2b3747;
+    --key-hover: #354356;
+
+    --border: #3d4b5e;
+
+    --text: #f5f7fa;
+    --muted: #94a3b8;
+
+    --accent: #5eead4;
+    --accent-dark: #14b8a6;
+
+    --ctrl: #3b82f6;
+    --shift: #a855f7;
+    --alt: #f97316;
+    --win: #ef4444;
+
+    --key-height: 60px;
+
+    /*
+        Key label font multiplier. Base sizes below are
+        already doubled; the slider in Settings -> Visuals
+        adjusts this value (0.5 ... 2).
+    */
+    --key-font-scale: 1;
+}
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    padding: 20px;
+
+    color: var(--text);
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            #1c2a3b,
+            var(--bg) 58%
+        );
+
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.app {
+    width: min(1800px, 100%);
+    margin: auto;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 15px;
+}
+
+.title h1 {
+    margin: 0 0 4px;
+
+    font-size: 25px;
+}
+
+.subtitle {
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+.header-buttons {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+}
+
+.header-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 38px;
+
+    padding: 8px 12px;
+
+    color: var(--text);
+
+    background: #202936;
+
+    border: 1px solid var(--border);
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+}
+
+.header-button:hover {
+    background: var(--key-hover);
+}
+
+.reset-button {
+    background: #f44336;
+}
+
+.reset-button:hover {
+    background: #d32f2f;
+}
+
+
+/* =========================================================
+   LAYOUT SELECTOR
+   ========================================================= */
+
+.layout-selector {
+    position: relative;
+}
+
+.layout-button {
+    min-width: 108px;
+}
+
+.layout-menu {
+    position: absolute;
+
+    top: calc(100% + 6px);
+    right: 0;
+
+    z-index: 500;
+
+    display: none;
+
+    width: 150px;
+
+    padding: 5px;
+
+    background: #151b23;
+
+    border: 1px solid var(--border);
+    border-radius: 9px;
+
+    box-shadow:
+        0 20px 50px rgba(0,0,0,.5);
+}
+
+.layout-menu.open {
+    display: block;
+}
+
+.layout-option {
+    width: 100%;
+
+    padding: 9px 10px;
+
+    text-align: left;
+
+    color: var(--muted);
+
+    background: transparent;
+
+    border: 1px solid transparent;
+    border-radius: 6px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+}
+
+.layout-option:hover {
+    color: var(--text);
+
+    background: #263344;
+}
+
+.layout-option.active {
+    color: var(--text);
+
+    background: #263344;
+
+    border-color: #3e5066;
+}
+
+
+/* =========================================================
+   COMBINATION DISPLAY
+   ========================================================= */
+
+.combination-display {
+    position: relative;
+
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-bottom: 12px;
+    padding: 7px 14px;
+
+    background: rgba(7,11,16,.95);
+
+    border: 1px solid var(--border);
+    border-radius: 11px;
+}
+
+/*
+    Close button on the combination display. Hidden by default,
+    revealed only while hovering over the combo window.
+*/
+.combo-close {
+    position: absolute;
+
+    top: 4px;
+    right: 4px;
+
+    width: 18px;
+    height: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    color: var(--muted);
+
+    background: rgba(0,0,0,.4);
+
+    border: none;
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    font-size: 11px;
+    line-height: 1;
+
+    opacity: 0;
+
+    transition: opacity .12s;
+}
+
+.combination-display:hover .combo-close {
+    opacity: 1;
+}
+
+.combo-close:hover {
+    color: white;
+
+    background: #ef4444;
+}
+
+.combination-empty {
+    color: #68778a;
+
+    font-size: 12px;
+}
+
+.combo-key {
+    min-width: 40px;
+    height: 30px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 9px;
+
+    color: white;
+
+    border-radius: 7px;
+
+    border: 1px solid rgba(255,255,255,.25);
+
+    box-shadow:
+        0 3px 12px rgba(0,0,0,.3);
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.combo-key.ctrl {
+    background: linear-gradient(#60a5fa,#2563eb);
+}
+
+.combo-key.shift {
+    background: linear-gradient(#c084fc,#9333ea);
+}
+
+.combo-key.alt {
+    background: linear-gradient(#fb923c,#ea580c);
+}
+
+.combo-key.win {
+    background: linear-gradient(#f87171,#dc2626);
+}
+
+.combo-key.normal {
+    background: linear-gradient(#475569,#334155);
+}
+
+.combo-plus {
+    color: #64748b;
+
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   KEYBOARD CONTAINER
+   ========================================================= */
+
+.keyboard-container {
+    width: 100%;
+
+    padding: 14px;
+
+    background: rgba(9,14,20,.97);
+
+    border: 1px solid var(--border);
+    border-radius: 15px;
+
+    box-shadow:
+        0 25px 70px rgba(0,0,0,.45);
+
+    overflow: hidden;
+}
+
+.keyboard-stage {
+    width: 100%;
+
+    position: relative;
+
+    overflow: hidden;
+}
+
+
+/*
+    Internal design width.
+
+    JavaScript scales this entire keyboard down
+    when the browser window is too narrow.
+*/
+
+.keyboard {
+    width: 1720px;
+
+    transform-origin: top left;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/* =========================================================
+   MAIN KEYBOARD
+   ========================================================= */
+
+.keyboard-layout {
+    display: flex;
+
+    gap: 8px;
+}
+
+.main-keyboard {
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/* =========================================================
+   RIGHT CLUSTER
+   ========================================================= */
+
+.right-cluster {
+    width: 230px;
+
+    flex: 0 0 230px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/*
+    TOP:
+
+    Print Screen
+    Scroll Lock
+    Pause
+
+    aligned above:
+
+    Insert
+    Home
+    Page Up
+*/
+
+.navigation-top {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 7px;
+}
+
+
+/*
+    Navigation middle:
+
+    Insert | Home | Page Up
+    Delete | End  | Page Down
+*/
+
+.navigation-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    grid-template-rows:
+        repeat(2, var(--key-height));
+
+    gap: 7px;
+}
+
+
+/*
+    IMPORTANT:
+
+    Arrows are below the navigation grid.
+
+         ↑
+      ←  ↓  →
+*/
+
+.arrow-grid {
+    display: grid;
+
+    /*
+        Align the arrow block with the lower rows of the
+        main keyboard:
+
+            ArrowUp         -> same height as the Shift row
+            Left/Down/Right -> same height as the Space row
+
+        The navigation column ends at:
+            key-height + gap + (2*key-height + gridGap) + gap
+        and the Shift row of the main keyboard starts at
+            4 * (key-height + rowGap) = 4 * (60 + 7) = 268px.
+
+        In Full mode (gridGap = 7) that requires a margin of
+        67px = var(--key-height) + 7px.
+    */
+
+    margin-top:
+        calc(var(--key-height) + 7px);
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    grid-template-rows:
+        repeat(2, var(--key-height));
+
+    gap: 7px;
+}
+
+.arrow-up {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.arrow-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+.arrow-down {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.arrow-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+
+/*
+    Numpad sits to the RIGHT of the arrow/navigation
+    section.
+*/
+
+.navigation-and-arrows {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+
+/* =========================================================
+   NUMPAD
+   ========================================================= */
+
+.numpad {
+    width: 290px;
+
+    flex: 0 0 290px;
+
+    /*
+        Align the numpad with the bottom of the main
+        keyboard (the Shift / Space rows) instead of the
+        top. The layout container is exactly as tall as
+        the main keyboard, so pushing the numpad to its
+        bottom shifts it down by one key height.
+    */
+
+    align-self: flex-end;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    grid-template-rows:
+        repeat(5, var(--key-height));
+
+    gap: 7px;
+}
+
+
+/*
+    Numpad Enter and + are TWO TIMES normal height.
+*/
+
+.num-plus {
+    grid-column: 4;
+
+    grid-row: 2 / span 2;
+}
+
+.num-enter {
+    grid-column: 4;
+
+    grid-row: 4 / span 2;
+}
+
+.numpad .key.num-plus,
+.numpad .key.num-enter {
+    /*
+        The .key rule sets height: var(--key-height),
+        which would stop these two keys from filling
+        their 2-row grid cells.
+
+        Override it (with a higher-specificity selector)
+        so both grow to double height.
+    */
+
+    height: 100%;
+    min-height: 100%;
+}
+
+.num-zero {
+    grid-column: 1 / span 2;
+
+    grid-row: 5;
+}
+
+
+/* =========================================================
+   COMPACT MODE
+   ========================================================= */
+
+/*
+    Compact mode keeps all important keys but makes the
+    right-hand section narrower.
+
+    The keyboard is then scaled as a single unit.
+*/
+
+.keyboard.compact .right-cluster {
+    width: 215px;
+
+    flex-basis: 215px;
+}
+
+.keyboard.compact .numpad {
+    width: 275px;
+
+    flex-basis: 275px;
+}
+
+.keyboard.compact .keyboard-layout {
+    gap: 6px;
+}
+
+.keyboard.compact .keyboard-row,
+.keyboard.compact .navigation-top,
+.keyboard.compact .navigation-grid,
+.keyboard.compact .arrow-grid,
+.keyboard.compact .numpad {
+    gap: 5px;
+}
+
+.keyboard.compact {
+    gap: 5px;
+}
+
+
+/*
+    Full mode uses larger spacing.
+*/
+
+.keyboard.full .right-cluster {
+    width: 230px;
+
+    flex-basis: 230px;
+}
+
+.keyboard.full .numpad {
+    width: 290px;
+
+    flex-basis: 290px;
+}
+
+
+/* =========================================================
+   ROWS
+   ========================================================= */
+
+.keyboard-row {
+    display: flex;
+
+    gap: 7px;
+}
+
+
+/* =========================================================
+   KEY
+   ========================================================= */
+
+.key {
+    position: relative;
+
+    height: var(--key-height);
+
+    min-width: 0;
+
+    flex: 1;
+
+    padding: 0;
+
+    color: var(--text);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--key-top),
+            var(--key)
+        );
+
+    border: 1px solid var(--border);
+
+    border-bottom: 4px solid #151b23;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    transition:
+        transform .06s,
+        background .08s,
+        box-shadow .08s,
+        filter .08s;
+}
+
+.key:hover {
+    background:
+        linear-gradient(
+            180deg,
+            #354255,
+            #273242
+        );
+}
+
+.key:active {
+    transform: translateY(2px);
+}
+
+
+/* =========================================================
+   WIDTHS
+   ========================================================= */
+
+.w1 {
+    flex: 1;
+}
+
+.w125 {
+    flex: 1.25;
+}
+
+.w15 {
+    flex: 1.5;
+}
+
+.w175 {
+    flex: 1.75;
+}
+
+.w2 {
+    flex: 2;
+}
+
+.w25 {
+    flex: 2.5;
+}
+
+.w6 {
+    flex: 6;
+}
+
+
+/* =========================================================
+   LETTER KEYS
+   ========================================================= */
+
+.key .english {
+    position: absolute;
+
+    top: 6px;
+    left: 8px;
+
+    font-size: calc(18px * var(--key-font-scale));
+    font-weight: 800;
+}
+
+.key .secondary {
+    position: absolute;
+
+    right: 7px;
+    bottom: 5px;
+
+    color: #9aa9bc;
+
+    font-size: calc(22.5px * var(--key-font-scale));
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   SPECIAL KEYS
+   ========================================================= */
+
+.key.special .main-label {
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 3px;
+
+    text-align: center;
+
+    font-size: calc(15px * var(--key-font-scale));
+    line-height: 1.1;
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   MODIFIER COLORS
+   ========================================================= */
+
+.key.modifier-ctrl.active {
+    background:
+        linear-gradient(#60a5fa,#2563eb);
+
+    border-color: #bfdbfe;
+
+    box-shadow:
+        0 0 20px rgba(96,165,250,.9),
+        0 0 50px rgba(96,165,250,.35);
+}
+
+.key.modifier-shift.active {
+    background:
+        linear-gradient(#c084fc,#9333ea);
+
+    border-color: #e9d5ff;
+
+    box-shadow:
+        0 0 20px rgba(192,132,252,.9),
+        0 0 50px rgba(192,132,252,.35);
+}
+
+.key.modifier-alt.active {
+    background:
+        linear-gradient(#fb923c,#ea580c);
+
+    border-color: #fed7aa;
+
+    box-shadow:
+        0 0 20px rgba(251,146,60,.9),
+        0 0 50px rgba(251,146,60,.35);
+}
+
+.key.modifier-win.active {
+    background:
+        linear-gradient(#f87171,#dc2626);
+
+    border-color: #fecaca;
+
+    box-shadow:
+        0 0 20px rgba(248,113,113,.9),
+        0 0 50px rgba(248,113,113,.35);
+}
+
+
+/* =========================================================
+   NORMAL PRESSED KEY
+   ========================================================= */
+
+.key.active.normal-active {
+    background:
+        linear-gradient(
+            180deg,
+            var(--accent),
+            var(--accent-dark)
+        );
+
+    border-color: #b8fff6;
+
+    color: #00231f;
+
+    transform: translateY(2px);
+
+    box-shadow:
+        0 0 15px rgba(45,212,191,.9),
+        0 0 40px rgba(45,212,191,.55);
+}
+
+
+/* =========================================================
+   MOUSE-HELD MODIFIER
+   ========================================================= */
+
+.key.mouse-held {
+    outline:
+        2px solid rgba(255,255,255,.9);
+
+    outline-offset: -3px;
+
+    filter: brightness(1.18);
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes keySignal {
+
+    0% {
+        filter: brightness(1);
+
+        box-shadow:
+            0 0 0 rgba(45,212,191,0);
+    }
+
+    25% {
+        filter: brightness(1.5);
+
+        box-shadow:
+            0 0 20px rgba(45,212,191,1),
+            0 0 45px rgba(45,212,191,.7);
+    }
+
+    50% {
+        filter: brightness(1);
+
+        box-shadow:
+            0 0 5px rgba(45,212,191,.4);
+    }
+
+    75% {
+        filter: brightness(1.5);
+
+        box-shadow:
+            0 0 25px rgba(45,212,191,1),
+            0 0 60px rgba(45,212,191,.7);
+    }
+
+    100% {
+        filter: brightness(1);
+    }
+}
+
+
+/* =========================================================
+   HINT
+   ========================================================= */
+
+.hint {
+    margin-top: 10px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+.middle-hint {
+    color: #5fbeab;
+}
+
+kbd {
+    padding: 2px 5px;
+
+    color: #dbe5ef;
+
+    background: #202936;
+
+    border: 1px solid var(--border);
+
+    border-radius: 4px;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   POPUPS
+   ========================================================= */
+
+.popup-overlay {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(0,0,0,.65);
+
+    backdrop-filter: blur(6px);
+}
+
+.popup-overlay.open {
+    display: flex;
+}
+
+.popup {
+    width: min(520px,100%);
+
+    background: #151b23;
+
+    border: 1px solid var(--border);
+
+    border-radius: 14px;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.6);
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 15px 17px;
+
+    border-bottom: 1px solid var(--border);
+}
+
+.popup-header h2 {
+    margin: 0;
+
+    font-size: 17px;
+}
+
+.popup-close {
+    width: 32px;
+    height: 32px;
+
+    color: white;
+
+    background: transparent;
+
+    border: 1px solid var(--border);
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    font-size: 18px;
+}
+
+.popup-content {
+    padding: 17px;
+}
+
+
+/* =========================================================
+   LANGUAGE
+   ========================================================= */
+
+.language-list {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.language-option {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 13px;
+
+    background: #202936;
+
+    border: 1px solid var(--border);
+
+    border-radius: 8px;
+
+    cursor: pointer;
+}
+
+.language-option:hover {
+    background: #293646;
+}
+
+.language-option input {
+    accent-color: var(--accent);
+}
+
+.language-code {
+    min-width: 48px;
+
+    color: var(--accent);
+
+    font-weight: 800;
+}
+
+.language-name {
+    color: var(--text);
+}
+
+/*
+    Two-panel language menu:
+    left  = site language
+    right = keyboard layout language
+
+    The two panels are separated by a vertical divider.
+*/
+
+.language-panels {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1px 1fr;
+
+    gap: 0 18px;
+
+    align-items: start;
+}
+
+.language-panels .language-panel-title {
+    margin: 0 0 10px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+}
+
+.language-divider {
+    width: 1px;
+
+    height: 100%;
+
+    min-height: 120px;
+
+    background: var(--border);
+}
+
+
+/* =========================================================
+   SETTINGS
+   ========================================================= */
+
+.settings-window {
+    width: min(680px,100%);
+
+    max-height: 90vh;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    background: #151b23;
+
+    border: 1px solid var(--border);
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 30px 100px rgba(0,0,0,.6);
+}
+
+.settings-body {
+    display: grid;
+
+    grid-template-columns: 145px 1fr;
+
+    min-height: 400px;
+
+    overflow: hidden;
+}
+
+.settings-nav {
+    padding: 10px;
+
+    background: #10161d;
+
+    border-right: 1px solid var(--border);
+}
+
+.settings-tab {
+    width: 100%;
+
+    margin-bottom: 5px;
+
+    padding: 9px 10px;
+
+    text-align: left;
+
+    color: var(--muted);
+
+    background: transparent;
+
+    border: 1px solid transparent;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+.settings-tab.active {
+    color: var(--text);
+
+    background: #263344;
+
+    border-color: #3e5066;
+}
+
+.settings-content {
+    padding: 18px;
+
+    overflow: auto;
+}
+
+.settings-section {
+    display: none;
+}
+
+.settings-section.active {
+    display: block;
+}
+
+.settings-section h3 {
+    margin: 0 0 5px;
+}
+
+.section-description {
+    margin: 0 0 18px;
+
+    color: var(--muted);
+
+    font-size: 11px;
+}
+
+.setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 13px 0;
+
+    border-bottom:
+        1px solid rgba(61,75,94,.5);
+}
+
+.setting-name {
+    font-size: 12px;
+
+    font-weight: 700;
+}
+
+.setting-description {
+    margin-top: 3px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+.settings-control {
+    padding: 7px 9px;
+
+    color: var(--text);
+
+    background: #202936;
+
+    border: 1px solid var(--border);
+
+    border-radius: 7px;
+}
+
+.settings-range {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+}
+
+.settings-range input {
+    width: 130px;
+
+    accent-color: var(--accent);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media(max-width: 900px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .title h1 {
+        font-size: 20px;
+    }
+
+    .subtitle {
+        display: none;
+    }
+
+}
+
+@media(max-width: 650px) {
+
+    .header {
+        align-items: flex-start;
+    }
+
+    .header-buttons {
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .settings-body {
+        grid-template-columns: 110px 1fr;
+    }
+
+    .setting-row {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+}
+
+
+/* =========================================================
+   OVERLAY MODE
+   ========================================================= */
+
+/*
+    Used when the keyboard is placed over other content
+    (e.g. a transparent browser source in OBS Studio).
+
+    Removes the page background and frame so only the keys
+    themselves are visible.
+*/
+
+body.overlay-mode {
+    padding: 0;
+
+    background: transparent;
+}
+
+body.overlay-mode .app {
+    width: auto;
+}
+
+body.overlay-mode .header,
+body.overlay-mode .hint,
+body.overlay-mode .middle-hint {
+    display: none;
+}
+
+body.overlay-mode .combination-display {
+    margin: 0 auto 12px;
+}
+
+body.overlay-mode .keyboard-container {
+    padding: 0;
+
+    background: transparent;
+
+    border: none;
+    border-radius: 0;
+
+    box-shadow: none;
+}
+
+/*
+    Center the keyboard in overlay mode so it stays aligned with
+    the centered combination display. The scale origin is moved
+    to top center so the keyboard remains centered even when the
+    auto-fit scale shrinks it on narrower windows.
+*/
+body.overlay-mode .keyboard {
+    margin: 0 auto;
+
+    transform-origin: top center;
+}
+
+/*
+    Overlay settings gear, placed to the right of F12. Hidden
+    by default; only shown in overlay mode so the mode can be
+    turned off from within the overlay.
+*/
+.overlay-settings-button {
+    flex: 0 0 44px;
+
+    height: var(--key-height);
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    color: var(--muted);
+
+    background:
+        linear-gradient(
+            180deg,
+            var(--key-top),
+            var(--key)
+        );
+
+    border: 1px solid var(--border);
+    border-bottom: 4px solid #151b23;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 18px;
+
+    transition:
+        transform .06s,
+        background .08s,
+        color .08s;
+}
+
+.overlay-settings-button:hover {
+    color: var(--text);
+
+    background: var(--key-hover);
+}
+
+.overlay-settings-button:active {
+    transform: translateY(2px);
+}
+
+body.overlay-mode .overlay-settings-button {
+    display: flex;
+}
