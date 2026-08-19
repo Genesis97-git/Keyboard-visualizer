@@ -236,7 +236,11 @@ select {
 
     gap: 7px;
 
-    margin-bottom: 12px;
+    /*
+        Center the combo window when syncComboWidth narrows it to
+        match the keyboard container.
+    */
+    margin: 0 auto 12px;
     padding: 7px 14px;
 
     background: rgba(7,11,16,.95);
@@ -353,6 +357,12 @@ select {
 
 .keyboard-container {
     width: 100%;
+
+    /*
+        Center the frame when fitKeyboard narrows it to the
+        keyboard's own width on wide windows.
+    */
+    margin: 0 auto;
 
     padding: 14px;
 
@@ -790,7 +800,28 @@ select {
     font-weight: 800;
 }
 
+/*
+    Alternate-script letter (e.g. Cyrillic) for the current
+    layout. Placed bottom-left so it never collides with the
+    main label (top-left) or the shift symbol (bottom-right).
+*/
 .key .secondary {
+    position: absolute;
+
+    left: 8px;
+    bottom: 5px;
+
+    color: #9aa9bc;
+
+    font-size: calc(20px * var(--key-font-scale));
+    font-weight: 600;
+}
+
+/*
+    Shift symbol (e.g. number-row upper symbol). Placed
+    bottom-right.
+*/
+.key .shift {
     position: absolute;
 
     right: 7px;
@@ -1144,6 +1175,20 @@ kbd {
     text-transform: uppercase;
 }
 
+.credit {
+    /*
+        Gap below the hints before the footer credit.
+    */
+    margin-top: 24px;
+
+    color: #68778a;
+
+    font-size: 11px;
+    line-height: 1.5;
+
+    text-align: center;
+}
+
 .language-divider {
     width: 1px;
 
@@ -1264,6 +1309,44 @@ kbd {
         1px solid rgba(61,75,94,.5);
 }
 
+/*
+    Settings nested under a parent (e.g. overlay alignment under
+    Overlay mode). Indented with a subtle accent border so it is
+    clear these only apply in overlay mode.
+*/
+.overlay-subsetting {
+    margin-left: 22px;
+    padding-left: 14px;
+
+    border-left: 2px solid rgba(94,234,212,.28);
+}
+
+.overlay-subsetting .setting-description {
+    color: #7d8a9d;
+}
+
+.overlay-subsetting select {
+    min-width: 88px;
+
+    padding: 7px 9px;
+
+    color: var(--text);
+
+    background: #202936;
+
+    border: 1px solid var(--border);
+    border-radius: 7px;
+
+    font: inherit;
+    font-size: 12px;
+}
+
+.overlay-subsetting select:focus {
+    outline: none;
+
+    border-color: var(--accent-dark);
+}
+
 .setting-name {
     font-size: 12px;
 
@@ -1297,10 +1380,40 @@ kbd {
     gap: 8px;
 }
 
-.settings-range input {
+.settings-range input[type="range"] {
     width: 130px;
 
     accent-color: var(--accent);
+}
+
+.settings-range input[type="number"] {
+    width: 72px;
+
+    padding: 4px 6px;
+
+    color: var(--text);
+
+    background: #10161d;
+
+    border: 1px solid var(--border);
+    border-radius: 6px;
+
+    font: inherit;
+    font-size: 12px;
+
+    text-align: center;
+}
+
+.settings-range input[type="number"]:focus {
+    outline: none;
+
+    border-color: var(--accent-dark);
+}
+
+.settings-unit {
+    color: var(--muted);
+
+    font-size: 11px;
 }
 
 
@@ -1417,22 +1530,66 @@ body.overlay-mode {
 
 body.overlay-mode .app {
     width: auto;
+
+    height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+    Horizontal + vertical alignment of the overlay keyboard.
+    Controlled by Settings -> Visuals -> Horizontal/Vertical
+    alignment (only meaningful in overlay mode).
+*/
+body.overlay-mode.overlay-h-left .app {
+    align-items: flex-start;
+}
+
+body.overlay-mode.overlay-h-center .app {
+    align-items: center;
+}
+
+body.overlay-mode.overlay-h-right .app {
+    align-items: flex-end;
+}
+
+body.overlay-mode.overlay-v-top .app {
+    justify-content: flex-start;
+}
+
+body.overlay-mode.overlay-v-center .app {
+    justify-content: center;
+}
+
+body.overlay-mode.overlay-v-bottom .app {
+    justify-content: flex-end;
 }
 
 body.overlay-mode .header,
 body.overlay-mode .hint,
-body.overlay-mode .middle-hint {
+body.overlay-mode .middle-hint,
+body.overlay-mode .credit {
     display: none;
 }
 
 body.overlay-mode .combination-display {
     margin: 0 0 12px;
 
-    justify-content: flex-start;
+    justify-content: center;
 }
 
 body.overlay-mode .keyboard-container {
     padding: 0;
+
+    /*
+        Remove the base rule's "margin: 0 auto" (used to center the
+        frame in normal mode). In overlay mode the horizontal
+        position is controlled by the parent .app's align-items
+        (left/center/right), and auto horizontal margins would
+        override that and force centering.
+    */
+    margin: 0;
 
     background: transparent;
 

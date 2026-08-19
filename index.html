@@ -21,7 +21,7 @@
 
 <title>Keyboard Visualizer</title>
 
-<link rel="stylesheet" href="styles.css?v=20260819-1">
+<link rel="stylesheet" href="styles.css?v=20260819-2">
 </head>
 
 
@@ -183,6 +183,11 @@
 
 </div>
 
+
+<div class="credit" data-i18n="credit">
+    Crafted with extensive help of SourceCraft Code Assistant
+</div>
+
 </div>
 
 
@@ -278,10 +283,10 @@
 
                 <button
                     class="settings-tab"
-                    data-tab="keyboard"
-                    data-i18n="keyboard"
+                    data-tab="general"
+                    data-i18n="general"
                 >
-                    ⌨ Keyboard
+                    ⚙ General
                 </button>
 
             </nav>
@@ -335,12 +340,12 @@
 
                         <div>
 
-                            <div class="setting-name" data-i18n="flashCount">
-                                Number of flashes
+                            <div class="setting-name" data-i18n="keyHoldTime">
+                                Key hold time
                             </div>
 
-                            <div class="setting-description" data-i18n="flashCountDescription">
-                                Number of pulses for each key.
+                            <div class="setting-description" data-i18n="keyHoldTimeDescription">
+                                How long a clicked key stays highlighted.
                             </div>
 
                         </div>
@@ -349,15 +354,22 @@
 
                             <input
                                 type="range"
-                                id="flashCount"
-                                min="1"
-                                max="10"
-                                value="3"
+                                id="keyHoldTime"
+                                min="100"
+                                max="1000"
+                                value="300"
                             >
 
-                            <span id="flashCountValue">
-                                3
-                            </span>
+                            <input
+                                type="number"
+                                id="keyHoldTimeInput"
+                                min="100"
+                                max="100000"
+                                step="10"
+                                value="300"
+                            >
+
+                            <span class="settings-unit">ms</span>
 
                         </div>
 
@@ -388,9 +400,16 @@
                                 value="450"
                             >
 
-                            <span id="animationSpeedValue">
-                                450 ms
-                            </span>
+                            <input
+                                type="number"
+                                id="animationSpeedInput"
+                                min="70"
+                                max="100000"
+                                step="10"
+                                value="450"
+                            >
+
+                            <span class="settings-unit">ms</span>
 
                         </div>
 
@@ -481,11 +500,11 @@
 
                         <div>
 
-                            <div class="setting-name">
+                            <div class="setting-name" data-i18n="highlightBothModifiers">
                                 Highlight both modifier sides
                             </div>
 
-                            <div class="setting-description">
+                            <div class="setting-description" data-i18n="highlightBothModifiersDescription">
                                 When enabled, pressing either Ctrl/Shift/Alt/Win
                                 highlights both sides.
                             </div>
@@ -544,25 +563,75 @@
 
                     </div>
 
-                </section>
+
+                    <!--
+                        Overlay-only alignment, indented to make it
+                        clear these apply only in overlay mode.
+                    -->
+                    <div class="setting-row overlay-subsetting">
+
+                        <div>
+
+                            <div class="setting-name" data-i18n="overlayAlignH">
+                                Horizontal alignment
+                            </div>
+
+                            <div class="setting-description" data-i18n="overlayAlignHDescription">
+                                Horizontal position of the keyboard in overlay mode.
+                            </div>
+
+                        </div>
+
+                        <select id="overlayAlignH">
+
+                            <option value="left" data-i18n="alignLeft">
+                                Left
+                            </option>
+
+                            <option value="center" data-i18n="alignCenter">
+                                Center
+                            </option>
+
+                            <option value="right" data-i18n="alignRight">
+                                Right
+                            </option>
+
+                        </select>
+
+                    </div>
 
 
-                <!-- =================================================
-                     KEYBOARD
-                     ================================================= -->
+                    <div class="setting-row overlay-subsetting">
 
-                <section
-                    class="settings-section"
-                    id="settings-keyboard"
-                >
+                        <div>
 
-                    <h3 data-i18n="keyboard">
-                        Keyboard
-                    </h3>
+                            <div class="setting-name" data-i18n="overlayAlignV">
+                                Vertical alignment
+                            </div>
 
-                    <p class="section-description" data-i18n="keyboardDescription">
-                        Keyboard behavior and sizing.
-                    </p>
+                            <div class="setting-description" data-i18n="overlayAlignVDescription">
+                                Vertical position of the keyboard in overlay mode.
+                            </div>
+
+                        </div>
+
+                        <select id="overlayAlignV">
+
+                            <option value="top" data-i18n="alignTop">
+                                Top
+                            </option>
+
+                            <option value="center" data-i18n="alignCenter">
+                                Center
+                            </option>
+
+                            <option value="bottom" data-i18n="alignBottom">
+                                Bottom
+                            </option>
+
+                        </select>
+
+                    </div>
 
 
                     <div class="setting-row">
@@ -583,6 +652,49 @@
                             type="checkbox"
                             id="autoFit"
                             checked
+                        >
+
+                    </div>
+
+                </section>
+
+
+                <!-- =================================================
+                     GENERAL
+                     ================================================= -->
+
+                <section
+                    class="settings-section"
+                    id="settings-general"
+                >
+
+                    <h3 data-i18n="general">
+                        General
+                    </h3>
+
+                    <p class="section-description" data-i18n="generalDescription">
+                        Input behavior and interactions.
+                    </p>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <div class="setting-name" data-i18n="mouseOnlyMode">
+                                Mouse-only mode
+                            </div>
+
+                            <div class="setting-description" data-i18n="mouseOnlyModeDescription">
+                                Disable physical key capture; activate keys only with
+                                the left and middle mouse buttons.
+                            </div>
+
+                        </div>
+
+                        <input
+                            type="checkbox"
+                            id="mouseOnlyMode"
                         >
 
                     </div>
@@ -623,7 +735,7 @@
     available inside the inline script below.
 -->
 
-<script src="languages.js?v=20260819-1"></script>
+<script src="languages.js?v=20260819-2"></script>
 
 <script>
 
@@ -827,6 +939,9 @@ const keyboard =
 const keyboardStage =
     document.getElementById("keyboardStage");
 
+const keyboardContainer =
+    document.querySelector(".keyboard-container");
+
 const combinationDisplay =
     document.getElementById("combinationDisplay");
 
@@ -938,17 +1053,17 @@ const modifierInfo = {
 const animationEnabled =
     document.getElementById("animationEnabled");
 
-const flashCount =
-    document.getElementById("flashCount");
+const keyHoldTime =
+    document.getElementById("keyHoldTime");
 
-const flashCountValue =
-    document.getElementById("flashCountValue");
+const keyHoldTimeInput =
+    document.getElementById("keyHoldTimeInput");
 
 const animationSpeed =
     document.getElementById("animationSpeed");
 
-const animationSpeedValue =
-    document.getElementById("animationSpeedValue");
+const animationSpeedInput =
+    document.getElementById("animationSpeedInput");
 
 const keyFontScale =
     document.getElementById("keyFontScale");
@@ -965,6 +1080,9 @@ const mouseModifierMode =
 const highlightBothModifiers =
     document.getElementById("highlightBothModifiers");
 
+const mouseOnlyMode =
+    document.getElementById("mouseOnlyMode");
+
 const showCombination =
     document.getElementById("showCombination");
 
@@ -973,6 +1091,12 @@ const autoFit =
 
 const overlayMode =
     document.getElementById("overlayMode");
+
+const overlayAlignH =
+    document.getElementById("overlayAlignH");
+
+const overlayAlignV =
+    document.getElementById("overlayAlignV");
 
 
 /* ============================================================
@@ -1010,8 +1134,8 @@ const DEFAULT_SETTINGS = {
     animationEnabled:
         true,
 
-    flashCount:
-        3,
+    keyHoldTime:
+        300,
 
     animationSpeed:
         450,
@@ -1028,6 +1152,9 @@ const DEFAULT_SETTINGS = {
     highlightBothModifiers:
         false,
 
+    mouseOnlyMode:
+        false,
+
     showCombination:
         true,
 
@@ -1035,7 +1162,13 @@ const DEFAULT_SETTINGS = {
         true,
 
     overlayMode:
-        false
+        false,
+
+    overlayAlignH:
+        "left",
+
+    overlayAlignV:
+        "top"
 
 };
 
@@ -1062,11 +1195,11 @@ function saveSettings() {
         animationEnabled:
             animationEnabled.checked,
 
-        flashCount:
-            flashCount.value,
+        keyHoldTime:
+            keyHoldTimeInput.value,
 
         animationSpeed:
-            animationSpeed.value,
+            animationSpeedInput.value,
 
         keyFontScale:
             keyFontScale.value,
@@ -1080,6 +1213,9 @@ function saveSettings() {
         highlightBothModifiers:
             highlightBothModifiers.checked,
 
+        mouseOnlyMode:
+            mouseOnlyMode.checked,
+
         showCombination:
             showCombination.checked,
 
@@ -1087,7 +1223,13 @@ function saveSettings() {
             autoFit.checked,
 
         overlayMode:
-            overlayMode.checked
+            overlayMode.checked,
+
+        overlayAlignH:
+            overlayAlignH.value,
+
+        overlayAlignV:
+            overlayAlignV.value
 
     };
 
@@ -1222,6 +1364,7 @@ function loadSettings() {
         "showShiftSymbols",
         "mouseModifierMode",
         "highlightBothModifiers",
+        "mouseOnlyMode",
         "showCombination",
         "autoFit",
         "overlayMode"
@@ -1236,6 +1379,25 @@ function loadSettings() {
 
         }
     );
+
+
+    /*
+        Overlay alignment strings, validated against their allowed
+        values.
+    */
+    settings.overlayAlignH =
+        ["left", "center", "right"].includes(
+            parsed.overlayAlignH
+        )
+            ? parsed.overlayAlignH
+            : DEFAULT_SETTINGS.overlayAlignH;
+
+    settings.overlayAlignV =
+        ["top", "center", "bottom"].includes(
+            parsed.overlayAlignV
+        )
+            ? parsed.overlayAlignV
+            : DEFAULT_SETTINGS.overlayAlignV;
 
 
     /*
@@ -1260,19 +1422,19 @@ function loadSettings() {
         };
 
 
-    settings.flashCount =
+    settings.keyHoldTime =
         clamp(
-            parsed.flashCount,
-            1,
-            10,
-            DEFAULT_SETTINGS.flashCount
+            parsed.keyHoldTime,
+            100,
+            100000,
+            DEFAULT_SETTINGS.keyHoldTime
         );
 
     settings.animationSpeed =
         clamp(
             parsed.animationSpeed,
             70,
-            700,
+            100000,
             DEFAULT_SETTINGS.animationSpeed
         );
 
@@ -1318,10 +1480,22 @@ function applySettings(settings) {
     animationEnabled.checked =
         settings.animationEnabled;
 
-    flashCount.value =
-        settings.flashCount;
+    keyHoldTime.value =
+        Math.min(
+            Number(keyHoldTime.max),
+            settings.keyHoldTime
+        );
+
+    keyHoldTimeInput.value =
+        settings.keyHoldTime;
 
     animationSpeed.value =
+        Math.min(
+            Number(animationSpeed.max),
+            settings.animationSpeed
+        );
+
+    animationSpeedInput.value =
         settings.animationSpeed;
 
     keyFontScale.value =
@@ -1336,6 +1510,9 @@ function applySettings(settings) {
     highlightBothModifiers.checked =
         settings.highlightBothModifiers;
 
+    mouseOnlyMode.checked =
+        settings.mouseOnlyMode;
+
     showCombination.checked =
         settings.showCombination;
 
@@ -1344,6 +1521,12 @@ function applySettings(settings) {
 
     overlayMode.checked =
         settings.overlayMode;
+
+    overlayAlignH.value =
+        settings.overlayAlignH;
+
+    overlayAlignV.value =
+        settings.overlayAlignV;
 
 
     document.documentElement.style.setProperty(
@@ -1387,10 +1570,16 @@ function resetSettings() {
     animationEnabled.checked =
         DEFAULT_SETTINGS.animationEnabled;
 
-    flashCount.value =
-        DEFAULT_SETTINGS.flashCount;
+    keyHoldTime.value =
+        DEFAULT_SETTINGS.keyHoldTime;
+
+    keyHoldTimeInput.value =
+        DEFAULT_SETTINGS.keyHoldTime;
 
     animationSpeed.value =
+        DEFAULT_SETTINGS.animationSpeed;
+
+    animationSpeedInput.value =
         DEFAULT_SETTINGS.animationSpeed;
 
     keyFontScale.value =
@@ -1405,6 +1594,9 @@ function resetSettings() {
     highlightBothModifiers.checked =
         DEFAULT_SETTINGS.highlightBothModifiers;
 
+    mouseOnlyMode.checked =
+        DEFAULT_SETTINGS.mouseOnlyMode;
+
     showCombination.checked =
         DEFAULT_SETTINGS.showCombination;
 
@@ -1413,6 +1605,12 @@ function resetSettings() {
 
     overlayMode.checked =
         DEFAULT_SETTINGS.overlayMode;
+
+    overlayAlignH.value =
+        DEFAULT_SETTINGS.overlayAlignH;
+
+    overlayAlignV.value =
+        DEFAULT_SETTINGS.overlayAlignV;
 
 
     document.documentElement.style.setProperty(
@@ -1902,12 +2100,11 @@ function createKey(
 
 
         /*
-            Upper symbols reachable with Shift on the number
-            row. Shown as secondary labels when the setting
-            is enabled.
+            Upper symbols reachable with Shift, per layout.
+            Shown when the "Show Shift symbols" setting is on.
         */
-
         const shiftSymbols = {
+            Backquote: "~",
             Digit1: "!",
             Digit2: "@",
             Digit3: "#",
@@ -1919,19 +2116,86 @@ function createKey(
             Digit9: "(",
             Digit0: ")",
             Minus: "_",
-            Equal: "+"
+            Equal: "+",
+            BracketLeft: "{",
+            BracketRight: "}",
+            Backslash: "|",
+            Semicolon: ":",
+            Quote: "\"",
+            Comma: "<",
+            Period: ">",
+            Slash: "?"
         };
 
 
+        /*
+            Russian layout shift symbols. The number row shares its
+            symbols with English (1!, 5%, 8*, ...), while a few
+            digits and the backslash/slash keys differ. Punctuation
+            keys (brackets, quotes, comma, period) keep only their
+            Cyrillic letters, so they get no shift symbol here.
+        */
+        const russianShiftSymbols = {
+            Digit1: "!",
+            Digit2: "\"",
+            Digit3: "№",
+            Digit4: ";",
+            Digit5: "%",
+            Digit6: ":",
+            Digit7: "?",
+            Digit8: "*",
+            Digit9: "(",
+            Digit0: ")",
+            Minus: "_",
+            Equal: "+",
+            Backslash: "/",
+            Slash: "?"
+        };
+
+
+        const isRuLayout =
+            currentLanguage === "enru";
+
+
+        const enShift =
+            showShiftSymbols.checked
+                ? shiftSymbols[code]
+                : undefined;
+
+        const ruShift =
+            showShiftSymbols.checked
+                ? russianShiftSymbols[code]
+                : undefined;
+
+
+        /*
+            On the combined EN/RU layout every key shows its
+            Russian symbol — the Cyrillic letter where one exists,
+            otherwise the Russian shift symbol (e.g. "2" -> `"`) — and
+            the English shift symbol. That gives number and
+            punctuation keys up to three symbols. On the English
+            layout only the English shift symbol is added.
+        */
         const secondary =
-            langSecondary ||
-            (
-                showShiftSymbols.checked
-                    ? shiftSymbols[code]
-                    : undefined
-            );
+            isRuLayout
+                ? (langSecondary || ruShift)
+                : undefined;
+
+        const shift =
+            isRuLayout
+                ? (
+                    enShift &&
+                    enShift !== secondary
+                        ? enShift
+                        : undefined
+                )
+                : enShift;
 
 
+        /*
+            Alternate-script / Russian symbol, positioned
+            bottom-left.
+        */
         if (secondary) {
 
             const secondaryElement =
@@ -1946,6 +2210,28 @@ function createKey(
 
             key.appendChild(
                 secondaryElement
+            );
+
+        }
+
+
+        /*
+            English shift symbol, positioned bottom-right.
+        */
+        if (shift) {
+
+            const shiftElement =
+                document.createElement("span");
+
+            shiftElement.className =
+                "shift";
+
+            shiftElement.textContent =
+                shift;
+
+
+            key.appendChild(
+                shiftElement
             );
 
         }
@@ -2403,8 +2689,36 @@ function fitKeyboard() {
     }
 
 
+    /*
+        Available width for the keyboard is the app frame (a
+        stable reference that this function never resizes) minus
+        the keyboard container's horizontal padding and borders.
+        The keyboard must fit inside the container's content box,
+        so scaling it to the full app width would push the right
+        column past the padded edge and get clipped.
+    */
+    const app = keyboardContainer.parentElement;
+
+    const appWidth =
+        app
+            ? app.clientWidth
+            : window.innerWidth;
+
+    const containerStyle =
+        window.getComputedStyle(
+            keyboardContainer
+        );
+
     const availableWidth =
-        keyboardStage.clientWidth;
+        appWidth
+            - (
+                parseFloat(containerStyle.paddingLeft) +
+                parseFloat(containerStyle.paddingRight)
+            )
+            - (
+                parseFloat(containerStyle.borderLeftWidth) +
+                parseFloat(containerStyle.borderRightWidth)
+            );
 
 
     const keyboardWidth =
@@ -2430,6 +2744,58 @@ function fitKeyboard() {
         `scale(${scale})`;
 
 
+    /*
+        Overlay mode: shrink the container/stage to the scaled
+        keyboard size so the flex layout in body.overlay-mode .app
+        can align it (left/center/right, top/center/bottom).
+    */
+    if (overlayMode.checked) {
+
+        const scaledWidth =
+            keyboardWidth * scale;
+
+        keyboardStage.style.width =
+            scaledWidth + "px";
+
+        keyboardContainer.style.width =
+            scaledWidth + "px";
+
+    }
+    /*
+        Normal mode, window wider than the keyboard: shrink the
+        frame to hug the keyboard so there is no empty space to
+        the right.
+    */
+    else if (scale >= 1) {
+
+        keyboardStage.style.width =
+            keyboardWidth + "px";
+
+        keyboardContainer.style.width =
+            (keyboardWidth +
+                (
+                    keyboardContainer.offsetWidth -
+                    keyboardContainer.clientWidth
+                ) +
+                horizontalPadding(keyboardContainer)
+            ) + "px";
+
+    }
+    /*
+        Normal mode, keyboard scaled down: keep the frame filling
+        the available width.
+    */
+    else {
+
+        keyboardStage.style.width =
+            "100%";
+
+        keyboardContainer.style.width =
+            "100%";
+
+    }
+
+
     keyboardStage.style.height =
         `${keyboard.offsetHeight * scale}px`;
 
@@ -2439,9 +2805,27 @@ function fitKeyboard() {
 
 
 /*
-    In overlay mode the combination display should span the
-    same width as the (scaled) keyboard so the combo window
-    sits directly above the keys.
+    Total horizontal padding (left + right) of an element,
+    from its computed style.
+*/
+function horizontalPadding(el) {
+
+    const cs =
+        window.getComputedStyle(el);
+
+    return (
+        parseFloat(cs.paddingLeft) +
+        parseFloat(cs.paddingRight)
+    );
+
+}
+
+
+/*
+    The combination display should match the width of the
+    keyboard container so its edges line up with the frame.
+    In overlay mode it instead matches the (scaled) keyboard
+    so the combo sits directly above the keys.
 */
 function syncComboWidth() {
 
@@ -2456,8 +2840,11 @@ function syncComboWidth() {
     }
     else {
 
+        const width =
+            keyboardContainer.offsetWidth;
+
         combinationDisplay.style.width =
-            "";
+            width ? width + "px" : "";
 
     }
 
@@ -2540,9 +2927,25 @@ function activateKey(key, source) {
         }
         else {
 
-            toggleKeyLoop(
-                key
-            );
+            /*
+                A normal key: toggle its held state. If it is
+                already held (via either mouse button), release
+                it; otherwise start an infinite pulsing loop.
+            */
+            if (key._held) {
+
+                releaseKey(
+                    key
+                );
+
+            }
+            else {
+
+                startKeyLoop(
+                    key
+                );
+
+            }
 
         }
 
@@ -2592,13 +2995,44 @@ function activateKey(key, source) {
 
 
     /*
-        NORMAL KEY: flash it and remember it for the
-        combination display.
+        NORMAL KEY.
 
-        If the key is already held via middle-click, an LMB
-        click must not cancel the loop or reset its state,
-        otherwise the next MMB click would re-start the loop
-        instead of stopping it. Leave the loop running.
+        If the key is currently held (via LMB or MMB), any
+        further mouse click — left or middle — deactivates it.
+        Otherwise LMB flashes it for the configured hold time and
+        MMB starts an infinite pulsing loop.
+    */
+    if (source === "mouse") {
+
+        if (key._held) {
+
+            releaseKey(
+                key
+            );
+
+        }
+        else {
+
+            lastNormalKey =
+                key.dataset.label;
+
+            flashKey(
+                key
+            );
+
+            updateCombinationDisplay();
+
+        }
+
+        return;
+
+    }
+
+
+    /*
+        KEYBOARD press: flash it and remember it for the
+        combination display. A physical press must not disturb
+        an active middle-click loop.
     */
     if (key._looping) {
         return;
@@ -2622,14 +3056,8 @@ function activateKey(key, source) {
 
 function flashKey(key) {
 
-    /*
-        If the key is already held via middle-click, do not
-        cancel its loop or reset its state; a single flash
-        must not disturb an active pulsing loop.
-    */
-    if (key._looping) {
-        return;
-    }
+    key._held =
+        true;
 
     key._looping =
         false;
@@ -2638,74 +3066,6 @@ function flashKey(key) {
         key
     );
 
-    key.classList.remove(
-        "active",
-        "normal-active"
-    );
-
-
-    key.style.animation =
-        "none";
-
-
-    void key.offsetWidth;
-
-
-    /*
-        Animation disabled.
-    */
-
-    if (!animationEnabled.checked) {
-
-        key.classList.add(
-            "active",
-            "normal-active"
-        );
-
-
-        clearTimeout(
-            key._releaseTimer
-        );
-
-
-        key._releaseTimer =
-            setTimeout(
-                () => {
-
-                    key.classList.remove(
-                        "active",
-                        "normal-active"
-                    );
-
-                    if (
-                        !key._looping &&
-                        lastNormalKey === key.dataset.label
-                    ) {
-                        lastNormalKey = null;
-                        updateCombinationDisplay();
-                    }
-
-                },
-                180
-            );
-
-
-        return;
-
-    }
-
-
-    const count =
-        Number(
-            flashCount.value
-        );
-
-
-    const speed =
-        Number(
-            animationSpeed.value
-        );
-
 
     key.classList.add(
         "active",
@@ -2713,8 +3073,28 @@ function flashKey(key) {
     );
 
 
-    key.style.animation =
-        `keySignal ${speed}ms ease-in-out 0s ${count}`;
+    /*
+        Animate the key (if enabled) while it is held. The
+        animation runs for the whole hold time, then releaseKey
+        clears it.
+    */
+    if (animationEnabled.checked) {
+
+        const speed =
+            Number(
+                animationSpeedInput.value
+            );
+
+        key.style.animation =
+            `keySignal ${speed}ms ease-in-out 0s infinite`;
+
+    }
+
+
+    const holdTime =
+        Number(
+            keyHoldTimeInput.value
+        );
 
 
     clearTimeout(
@@ -2726,24 +3106,12 @@ function flashKey(key) {
         setTimeout(
             () => {
 
-                key.classList.remove(
-                    "active",
-                    "normal-active"
+                releaseKey(
+                    key
                 );
 
-                key.style.animation =
-                    "";
-
-                if (
-                    !key._looping &&
-                    lastNormalKey === key.dataset.label
-                ) {
-                    lastNormalKey = null;
-                    updateCombinationDisplay();
-                }
-
             },
-            count * speed + 80
+            holdTime
         );
 
 }
@@ -2754,28 +3122,15 @@ function flashKey(key) {
    ============================================================ */
 
 /*
-    Middle-click a key to start an infinite pulsing loop.
-    Middle-click the same key again to stop the loop
-    immediately.
+    Middle-click an idle key to start an infinite pulsing loop.
+    Middle-click (or left-click) a held key again to release it.
 */
-
-function toggleKeyLoop(key) {
-
-    if (key._looping) {
-
-        stopKeyLoop(key);
-
-    }
-    else {
-
-        startKeyLoop(key);
-
-    }
-
-}
 
 
 function startKeyLoop(key) {
+
+    key._held =
+        true;
 
     key._looping =
         true;
@@ -2790,14 +3145,18 @@ function startKeyLoop(key) {
     );
 
 
-    const speed =
-        Number(
-            animationSpeed.value
-        );
+    if (animationEnabled.checked) {
+
+        const speed =
+            Number(
+                animationSpeedInput.value
+            );
 
 
-    key.style.animation =
-        `keySignal ${speed}ms ease-in-out 0s infinite`;
+        key.style.animation =
+            `keySignal ${speed}ms ease-in-out 0s infinite`;
+
+    }
 
 
     clearTimeout(
@@ -2810,7 +3169,16 @@ function startKeyLoop(key) {
 }
 
 
-function stopKeyLoop(key) {
+/*
+    Release a key that is currently held — either a short
+    left-click flash or an infinite middle-click loop. It clears
+    the visual state, any pending release timer and the
+    combination display entry. Safe to call on any key.
+*/
+function releaseKey(key) {
+
+    key._held =
+        false;
 
     key._looping =
         false;
@@ -2827,8 +3195,73 @@ function stopKeyLoop(key) {
     key.style.animation =
         "";
 
+    clearTimeout(
+        key._releaseTimer
+    );
+
+
+    if (
+        lastNormalKey === key.dataset.label
+    ) {
+        lastNormalKey =
+            null;
+    }
+
 
     updateCombinationDisplay();
+
+}
+
+
+/*
+    Backwards-compatible alias used by the animation toggle and
+    reset handlers.
+*/
+function stopKeyLoop(key) {
+
+    releaseKey(
+        key
+    );
+
+}
+
+
+/*
+    True when the focused element is a place where the user types
+    text (text/number inputs, textareas, selects, contenteditable).
+    Range sliders, checkboxes and buttons are excluded so pressing
+    a physical key still drives the on-screen keyboard there.
+*/
+function isEditableTarget(target) {
+
+    if (!target) {
+        return false;
+    }
+
+    const tag = target.tagName;
+
+    if (tag === "TEXTAREA" || tag === "SELECT") {
+        return true;
+    }
+
+    if (tag === "INPUT") {
+
+        const type =
+            String(target.type || "")
+                .toLowerCase();
+
+        return ![
+            "checkbox",
+            "radio",
+            "button",
+            "submit",
+            "reset",
+            "range"
+        ].includes(type);
+
+    }
+
+    return target.isContentEditable === true;
 
 }
 
@@ -2840,6 +3273,21 @@ function stopKeyLoop(key) {
 document.addEventListener(
     "keydown",
     event => {
+
+        /*
+            Ignore keys when mouse-only mode is enabled, while the
+            settings popup is open, or when the user is typing in a
+            settings field (so physical keys don't activate the
+            on-screen keyboard).
+        */
+        if (
+            mouseOnlyMode.checked ||
+            settingsOverlay.classList.contains("open") ||
+            isEditableTarget(event.target)
+        ) {
+            return;
+        }
+
 
         const modifier =
             modifierCodes[event.code];
@@ -2920,6 +3368,20 @@ document.addEventListener(
 document.addEventListener(
     "keyup",
     event => {
+
+        /*
+            Mirror the keydown guard: don't track physical keys in
+            mouse-only mode, while the settings popup is open, or
+            while typing in a settings field.
+        */
+        if (
+            mouseOnlyMode.checked ||
+            settingsOverlay.classList.contains("open") ||
+            isEditableTarget(event.target)
+        ) {
+            return;
+        }
+
 
         const modifier =
             modifierCodes[event.code];
@@ -3231,6 +3693,14 @@ function applySiteLanguage() {
 
         });
 
+    /*
+        The combination display is built dynamically by JS, so it is
+        not covered by the static [data-i18n] loop above. Re-render it
+        so its localized text (e.g. the empty-state "noCombination"
+        message) follows a site-language change immediately.
+    */
+    updateCombinationDisplay();
+
 }
 
 
@@ -3346,7 +3816,6 @@ function buildLanguageList() {
 
             }
         );
-
 
     languagePanels.appendChild(
         sitePanel
@@ -3628,33 +4097,170 @@ animationEnabled.addEventListener(
     "change",
     () => {
 
+        /*
+            Turning animations off must also cancel any
+            currently running pulsing loops (started by
+            middle click) so no key keeps flashing.
+        */
+        if (!animationEnabled.checked) {
+
+            loopedKeys.forEach(
+                key => stopKeyLoop(key)
+            );
+
+        }
+
         saveSettings();
 
     }
 );
 
 
-flashCount.addEventListener(
+/*
+    Keep the slider and its number input in sync. The number
+    input is authoritative — it may hold values beyond the
+    slider's range (e.g. 5000 ms). Dragging the slider updates
+    the number input; typing in the number input moves the slider
+    only within the slider's range.
+*/
+
+function syncHoldTimeFromSlider() {
+
+    keyHoldTimeInput.value =
+        keyHoldTime.value;
+
+}
+
+function syncHoldTimeFromNumber(commit) {
+
+    let value =
+        Number(keyHoldTimeInput.value);
+
+    if (!Number.isFinite(value)) {
+        value = DEFAULT_SETTINGS.keyHoldTime;
+    }
+
+    const min =
+        Number(keyHoldTimeInput.min);
+
+    const max =
+        Number(keyHoldTimeInput.max);
+
+    value =
+        Math.max(
+            min,
+            Math.min(max, Math.round(value))
+        );
+
+    if (commit) {
+        keyHoldTimeInput.value = value;
+    }
+
+    // Slider can only represent up to its own max.
+    keyHoldTime.value =
+        Math.min(
+            Number(keyHoldTime.max),
+            value
+        );
+
+}
+
+
+keyHoldTime.addEventListener(
     "input",
     () => {
 
-        flashCountValue.textContent =
-            flashCount.value;
-
+        syncHoldTimeFromSlider();
         saveSettings();
 
     }
 );
+
+keyHoldTimeInput.addEventListener(
+    "input",
+    () => {
+
+        syncHoldTimeFromNumber(false);
+
+    }
+);
+
+keyHoldTimeInput.addEventListener(
+    "change",
+    () => {
+
+        syncHoldTimeFromNumber(true);
+        saveSettings();
+
+    }
+);
+
+
+function syncSpeedFromSlider() {
+
+    animationSpeedInput.value =
+        animationSpeed.value;
+
+}
+
+function syncSpeedFromNumber(commit) {
+
+    let value =
+        Number(animationSpeedInput.value);
+
+    if (!Number.isFinite(value)) {
+        value = DEFAULT_SETTINGS.animationSpeed;
+    }
+
+    const min =
+        Number(animationSpeedInput.min);
+
+    const max =
+        Number(animationSpeedInput.max);
+
+    value =
+        Math.max(
+            min,
+            Math.min(max, Math.round(value))
+        );
+
+    if (commit) {
+        animationSpeedInput.value = value;
+    }
+
+    animationSpeed.value =
+        Math.min(
+            Number(animationSpeed.max),
+            value
+        );
+
+}
 
 
 animationSpeed.addEventListener(
     "input",
     () => {
 
-        animationSpeedValue.textContent =
-            animationSpeed.value +
-            " ms";
+        syncSpeedFromSlider();
+        saveSettings();
 
+    }
+);
+
+animationSpeedInput.addEventListener(
+    "input",
+    () => {
+
+        syncSpeedFromNumber(false);
+
+    }
+);
+
+animationSpeedInput.addEventListener(
+    "change",
+    () => {
+
+        syncSpeedFromNumber(true);
         saveSettings();
 
     }
@@ -3756,6 +4362,42 @@ highlightBothModifiers.addEventListener(
     () => {
 
         updateModifierVisuals();
+
+        saveSettings();
+
+    }
+);
+
+
+mouseOnlyMode.addEventListener(
+    "change",
+    () => {
+
+        /*
+            When enabling mouse-only mode, release any physical
+            modifiers that may still be held, since key events
+            will no longer be tracked.
+        */
+        if (mouseOnlyMode.checked) {
+
+            Object.keys(physicalModifiers)
+                .forEach(
+                    modifier =>
+                        physicalModifiers[modifier] = false
+                );
+
+            document
+                .querySelectorAll(".key")
+                .forEach(key => {
+
+                    key.dataset.physicalModifier =
+                        "false";
+
+                });
+
+            updateModifierVisuals();
+
+        }
 
         saveSettings();
 
@@ -3909,6 +4551,47 @@ autoFit.addEventListener(
     (e.g. in OBS as a transparent browser source).
 */
 
+function applyOverlayAlignment() {
+
+    const h =
+        overlayAlignH.value;
+
+    const v =
+        overlayAlignV.value;
+
+    document.body.classList.toggle(
+        "overlay-h-left",
+        h === "left"
+    );
+
+    document.body.classList.toggle(
+        "overlay-h-center",
+        h === "center"
+    );
+
+    document.body.classList.toggle(
+        "overlay-h-right",
+        h === "right"
+    );
+
+    document.body.classList.toggle(
+        "overlay-v-top",
+        v === "top"
+    );
+
+    document.body.classList.toggle(
+        "overlay-v-center",
+        v === "center"
+    );
+
+    document.body.classList.toggle(
+        "overlay-v-bottom",
+        v === "bottom"
+    );
+
+}
+
+
 function applyOverlayMode() {
 
     document.body.classList.toggle(
@@ -3916,7 +4599,13 @@ function applyOverlayMode() {
         overlayMode.checked
     );
 
-    syncComboWidth();
+    applyOverlayAlignment();
+
+    /*
+        Re-size and re-align immediately so the keyboard snaps to
+        the configured position without needing a window resize.
+    */
+    fitKeyboard();
 
 }
 
@@ -3930,6 +4619,31 @@ overlayMode.addEventListener(
 
     }
 );
+
+
+overlayAlignH.addEventListener(
+    "change",
+    () => {
+
+        applyOverlayAlignment();
+        fitKeyboard();
+        saveSettings();
+
+    }
+);
+
+
+overlayAlignV.addEventListener(
+    "change",
+    () => {
+
+        applyOverlayAlignment();
+        fitKeyboard();
+        saveSettings();
+
+    }
+);
+
 
 applyOverlayMode();
 
@@ -4006,6 +4720,9 @@ function resetAll() {
             key.style.animation =
                 "";
 
+            key._held =
+                false;
+
             key._looping =
                 false;
 
@@ -4073,12 +4790,6 @@ applySettings(
 
 
 applySiteLanguage();
-
-flashCountValue.textContent =
-    flashCount.value;
-
-animationSpeedValue.textContent =
-    animationSpeed.value + " ms";
 
 keyFontScaleValue.textContent =
     Math.round(Number(keyFontScale.value) * 100) + "%";

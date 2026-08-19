@@ -118,6 +118,9 @@ const siteLanguages = {
             keyboardLayout:
                 "Layout",
 
+            credit:
+                "Crafted with extensive help of SourceCraft Code Assistant",
+
             settings:
                 "Settings",
 
@@ -154,17 +157,17 @@ const siteLanguages = {
             keyAnimationDescription:
                 "Animate keys when pressed.",
 
-            flashCount:
-                "Number of flashes",
+            keyHoldTime:
+                "Key hold time",
 
-            flashCountDescription:
-                "Number of pulses for each key.",
+            keyHoldTimeDescription:
+                "How long a clicked key stays highlighted.",
 
             animationSpeed:
                 "Animation speed",
 
             animationSpeedDescription:
-                "Speed of each pulse.",
+                "Delay between pulses.",
 
             keyFontSize:
                 "Key font size",
@@ -176,13 +179,19 @@ const siteLanguages = {
                 "Show Shift symbols",
 
             showShiftSymbolsDescription:
-                "Display the upper symbols on the number row.",
+                "Display the upper Shift symbols on the keys.",
 
             mouseModifierMode:
                 "Mouse modifier mode",
 
             mouseModifierDescription:
                 "Keep mouse-clicked modifiers held.",
+
+            highlightBothModifiers:
+                "Highlight both modifier sides",
+
+            highlightBothModifiersDescription:
+                "When enabled, pressing either Ctrl/Shift/Alt/Win highlights both sides.",
 
             combinationDisplay:
                 "Combination display",
@@ -202,6 +211,18 @@ const siteLanguages = {
             automaticSizingDescription:
                 "Scale keyboard to fit the window.",
 
+            general:
+                "General",
+
+            generalDescription:
+                "Input behavior and interactions.",
+
+            mouseOnlyMode:
+                "Mouse-only mode",
+
+            mouseOnlyModeDescription:
+                "Disable physical key capture; activate keys only with the left and middle mouse buttons.",
+
             compact:
                 "Compact",
 
@@ -215,13 +236,40 @@ const siteLanguages = {
                 "For key-combinations press Ctrl / Shift / Alt / Win + key OR click Ctrl / Shift / Alt / Win to hold it, then click another key.",
 
             middleHint:
-                "Click any with middle mouse button key to keep it pressed (pulsing), click it again to release.",
+                "Click any with middle mouse button key to keep it pressed, click it again to release.",
 
             overlayMode:
                 "Overlay mode",
 
             overlayModeDescription:
                 "Transparent background for use as an overlay.",
+
+            overlayAlignH:
+                "Horizontal alignment",
+
+            overlayAlignHDescription:
+                "Horizontal position of the keyboard in overlay mode.",
+
+            overlayAlignV:
+                "Vertical alignment",
+
+            overlayAlignVDescription:
+                "Vertical position of the keyboard in overlay mode.",
+
+            alignLeft:
+                "Left",
+
+            alignCenter:
+                "Center",
+
+            alignRight:
+                "Right",
+
+            alignTop:
+                "Top",
+
+            alignBottom:
+                "Bottom",
 
             resetSettings:
                 "Reset settings to defaults",
@@ -255,6 +303,9 @@ const siteLanguages = {
 
             keyboardLayout:
                 "Раскладка",
+
+            credit:
+                "Создано с помощью SourceCraft Code Assistant",
 
             settings:
                 "Настройки",
@@ -292,11 +343,11 @@ const siteLanguages = {
             keyAnimationDescription:
                 "Включить пульсацию клавиш при нажатии.",
 
-            flashCount:
-                "Количество вспышек",
+            keyHoldTime:
+                "Время удержания клавиши",
 
-            flashCountDescription:
-                "Количество вспышек пульсации.",
+            keyHoldTimeDescription:
+                "Как долго клавиша остаётся подсвеченной при нажатии.",
 
             animationSpeed:
                 "Скорость пульсации",
@@ -314,13 +365,19 @@ const siteLanguages = {
                 "Показывать символы Shift",
 
             showShiftSymbolsDescription:
-                "Отображать верхние символы на ряду цифр.",
+                "Отображать верхние символы Shift на клавишах.",
 
             mouseModifierMode:
                 "Режим зажатых Ctrl / Shift / Alt / Win",
 
             mouseModifierDescription:
                 "Оставлять кликнутые Ctrl / Shift / Alt / Win нажатыми.",
+
+            highlightBothModifiers:
+                "Подсвечивать обе стороны модификаторов",
+
+            highlightBothModifiersDescription:
+                "Нажатие Ctrl/Shift/Alt/Win будет подсвечивать эти клавиши с обеих сторон.",
 
             combinationDisplay:
                 "Отображать комбинацию клавиш",
@@ -340,6 +397,18 @@ const siteLanguages = {
             automaticSizingDescription:
                 "Подстраивать размер клавиатуры под размер окна.",
 
+            general:
+                "Общие",
+
+            generalDescription:
+                "Поведение ввода и взаимодействие.",
+
+            mouseOnlyMode:
+                "Режим мыши",
+
+            mouseOnlyModeDescription:
+                "Отключить захват физических клавиш; активировать клавиши только левой и средней кнопками мыши.",
+
             compact:
                 "Компактный",
 
@@ -353,13 +422,40 @@ const siteLanguages = {
                 "Для комбинаций клавиш: зажмите на своей клавиатуре Ctrl / Shift / Alt / Win и нажмите любую кнопку ИЛИ щелкните Ctrl / Shift / Alt / Win, чтобы их зажать, а затем нажмите другую клавишу.",
 
             middleHint:
-                "Щелкните любую клавишу колесом мыши, чтобы удерживать её нажатой (пульсация), щелкните ещё раз, чтобы отпустить.",
+                "Щелкните любую клавишу колесом мыши, чтобы удерживать её нажатой, щелкните ещё раз, чтобы отпустить.",
 
             overlayMode:
                 "Режим оверлея",
 
             overlayModeDescription:
                 "Прозрачный фон для использования поверх изображения.",
+
+            overlayAlignH:
+                "Горизонтальное выравнивание",
+
+            overlayAlignHDescription:
+                "Горизонтальное положение клавиатуры в режиме оверлея.",
+
+            overlayAlignV:
+                "Вертикальное выравнивание",
+
+            overlayAlignVDescription:
+                "Вертикальное положение клавиатуры в режиме оверлея.",
+
+            alignLeft:
+                "Слева",
+
+            alignCenter:
+                "По центру",
+
+            alignRight:
+                "Справа",
+
+            alignTop:
+                "Сверху",
+
+            alignBottom:
+                "Снизу",
 
             resetSettings:
                 "Сбросить настройки",
