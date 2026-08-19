@@ -579,6 +579,23 @@
 
         </div>
 
+
+        <div class="settings-footer">
+
+            <button
+                class="settings-reset-button"
+                id="resetSettingsButton"
+                data-i18n="resetSettings"
+            >
+                ⟲ Reset settings to defaults
+            </button>
+
+            <div class="settings-reset-description" data-i18n="resetSettingsDescription">
+                Restore all settings to their original values.
+            </div>
+
+        </div>
+
     </div>
 
 </div>
@@ -941,6 +958,462 @@ const autoFit =
 
 const overlayMode =
     document.getElementById("overlayMode");
+
+
+/* ============================================================
+   PERSISTENT SETTINGS
+   ============================================================ */
+
+/*
+    Settings are saved to localStorage under a single namespaced,
+    versioned key. On load every stored value is validated and
+    clamped so a stale, hand-edited or schema-mismatched value
+    can never break the UI; invalid entries fall back to defaults.
+
+    The page falls back silently when storage is unavailable
+    (private browsing, sandboxed OBS browser source, ...).
+*/
+
+const SETTINGS_KEY =
+    "kv-settings";
+
+const SETTINGS_VERSION =
+    1;
+
+
+const DEFAULT_SETTINGS = {
+
+    currentSiteLanguage:
+        null,   // null => auto-detect from the browser
+
+    currentLanguage:
+        "enru",
+
+    currentLayout:
+        "compact",
+
+    animationEnabled:
+        true,
+
+    flashCount:
+        3,
+
+    animationSpeed:
+        450,
+
+    keyFontScale:
+        1,
+
+    showShiftSymbols:
+        true,
+
+    mouseModifierMode:
+        true,
+
+    highlightBothModifiers:
+        false,
+
+    showCombination:
+        true,
+
+    autoFit:
+        true,
+
+    overlayMode:
+        false
+
+};
+
+
+/*
+    Persist the current state of every user-facing setting.
+*/
+function saveSettings() {
+
+    const data = {
+
+        version:
+            SETTINGS_VERSION,
+
+        currentSiteLanguage:
+            currentSiteLanguage,
+
+        currentLanguage:
+            currentLanguage,
+
+        currentLayout:
+            currentLayout,
+
+        animationEnabled:
+            animationEnabled.checked,
+
+        flashCount:
+            flashCount.value,
+
+        animationSpeed:
+            animationSpeed.value,
+
+        keyFontScale:
+            keyFontScale.value,
+
+        showShiftSymbols:
+            showShiftSymbols.checked,
+
+        mouseModifierMode:
+            mouseModifierMode.checked,
+
+        highlightBothModifiers:
+            highlightBothModifiers.checked,
+
+        showCombination:
+            showCombination.checked,
+
+        autoFit:
+            autoFit.checked,
+
+        overlayMode:
+            overlayMode.checked
+
+    };
+
+
+    try {
+
+        localStorage.setItem(
+            SETTINGS_KEY,
+            JSON.stringify(data)
+        );
+
+    }
+    catch (err) {
+
+        /* Storage unavailable - nothing to persist. */
+
+    }
+
+}
+
+
+/*
+    Read and validate the stored settings. Returns an object
+    suitable for applySettings, or null when nothing valid is
+    stored.
+*/
+function loadSettings() {
+
+    let raw;
+
+    try {
+
+        raw =
+            localStorage.getItem(
+                SETTINGS_KEY
+            );
+
+    }
+    catch (err) {
+
+        return null;
+
+    }
+
+
+    if (!raw) {
+        return null;
+    }
+
+
+    let parsed;
+
+    try {
+
+        parsed =
+            JSON.parse(raw);
+
+    }
+    catch (err) {
+
+        return null;
+
+    }
+
+
+    if (
+        !parsed ||
+        typeof parsed !== "object"
+    ) {
+        return null;
+    }
+
+
+    const settings = {};
+
+
+    /*
+        Site language: only accept a known language id.
+        Invalid / missing -> null (auto-detect again).
+    */
+
+    const siteLang =
+        parsed.currentSiteLanguage;
+
+    settings.currentSiteLanguage =
+        (
+            typeof siteLang === "string" &&
+            siteLanguages[siteLang]
+        )
+            ? siteLang
+            : null;
+
+
+    /*
+        Keyboard layout language: only accept a known id.
+    */
+
+    const kbLang =
+        parsed.currentLanguage;
+
+    settings.currentLanguage =
+        (
+            typeof kbLang === "string" &&
+            keyboardLanguages[kbLang]
+        )
+            ? kbLang
+            : DEFAULT_SETTINGS.currentLanguage;
+
+
+    /*
+        Keyboard mode (compact / full).
+    */
+
+    const layout =
+        parsed.currentLayout;
+
+    settings.currentLayout =
+        (
+            layout === "compact" ||
+            layout === "full"
+        )
+            ? layout
+            : DEFAULT_SETTINGS.currentLayout;
+
+
+    /*
+        Boolean toggles.
+    */
+
+    [
+        "animationEnabled",
+        "showShiftSymbols",
+        "mouseModifierMode",
+        "highlightBothModifiers",
+        "showCombination",
+        "autoFit",
+        "overlayMode"
+
+    ].forEach(
+        key => {
+
+            settings[key] =
+                typeof parsed[key] === "boolean"
+                    ? parsed[key]
+                    : DEFAULT_SETTINGS[key];
+
+        }
+    );
+
+
+    /*
+        Numeric sliders, clamped to their allowed range.
+    */
+
+    const clamp =
+        (value,min,max,fallback) => {
+
+            const n =
+                Number(value);
+
+            if (!Number.isFinite(n)) {
+                return fallback;
+            }
+
+            return Math.min(
+                max,
+                Math.max(min,n)
+            );
+
+        };
+
+
+    settings.flashCount =
+        clamp(
+            parsed.flashCount,
+            1,
+            10,
+            DEFAULT_SETTINGS.flashCount
+        );
+
+    settings.animationSpeed =
+        clamp(
+            parsed.animationSpeed,
+            70,
+            700,
+            DEFAULT_SETTINGS.animationSpeed
+        );
+
+    settings.keyFontScale =
+        clamp(
+            parsed.keyFontScale,
+            0.5,
+            2,
+            DEFAULT_SETTINGS.keyFontScale
+        );
+
+
+    return settings;
+
+}
+
+
+/*
+    Apply a loaded/validated settings object to the live UI and
+    state. Must run before buildKeyboard()/applySiteLanguage() so
+    the layout, languages and control values are correct from the
+    very first render.
+*/
+function applySettings(settings) {
+
+    if (!settings) {
+        return;
+    }
+
+
+    if (settings.currentSiteLanguage) {
+        currentSiteLanguage =
+            settings.currentSiteLanguage;
+    }
+
+    currentLanguage =
+        settings.currentLanguage;
+
+    currentLayout =
+        settings.currentLayout;
+
+
+    animationEnabled.checked =
+        settings.animationEnabled;
+
+    flashCount.value =
+        settings.flashCount;
+
+    animationSpeed.value =
+        settings.animationSpeed;
+
+    keyFontScale.value =
+        settings.keyFontScale;
+
+    showShiftSymbols.checked =
+        settings.showShiftSymbols;
+
+    mouseModifierMode.checked =
+        settings.mouseModifierMode;
+
+    highlightBothModifiers.checked =
+        settings.highlightBothModifiers;
+
+    showCombination.checked =
+        settings.showCombination;
+
+    autoFit.checked =
+        settings.autoFit;
+
+    overlayMode.checked =
+        settings.overlayMode;
+
+
+    document.documentElement.style.setProperty(
+        "--key-font-scale",
+        Number(keyFontScale.value)
+    );
+
+}
+
+
+/*
+    Restore every setting to its default value, clear storage and
+    re-render. The site language returns to browser auto-detection.
+*/
+function resetSettings() {
+
+    try {
+
+        localStorage.removeItem(
+            SETTINGS_KEY
+        );
+
+    }
+    catch (err) {
+
+        /* Storage unavailable - nothing to clear. */
+
+    }
+
+
+    currentSiteLanguage =
+        detectSiteLanguage();
+
+    currentLanguage =
+        DEFAULT_SETTINGS.currentLanguage;
+
+    currentLayout =
+        DEFAULT_SETTINGS.currentLayout;
+
+
+    animationEnabled.checked =
+        DEFAULT_SETTINGS.animationEnabled;
+
+    flashCount.value =
+        DEFAULT_SETTINGS.flashCount;
+
+    animationSpeed.value =
+        DEFAULT_SETTINGS.animationSpeed;
+
+    keyFontScale.value =
+        DEFAULT_SETTINGS.keyFontScale;
+
+    showShiftSymbols.checked =
+        DEFAULT_SETTINGS.showShiftSymbols;
+
+    mouseModifierMode.checked =
+        DEFAULT_SETTINGS.mouseModifierMode;
+
+    highlightBothModifiers.checked =
+        DEFAULT_SETTINGS.highlightBothModifiers;
+
+    showCombination.checked =
+        DEFAULT_SETTINGS.showCombination;
+
+    autoFit.checked =
+        DEFAULT_SETTINGS.autoFit;
+
+    overlayMode.checked =
+        DEFAULT_SETTINGS.overlayMode;
+
+
+    document.documentElement.style.setProperty(
+        "--key-font-scale",
+        DEFAULT_SETTINGS.keyFontScale
+    );
+
+
+    applySiteLanguage();
+    buildLanguageList();
+    buildKeyboard();
+    updateCombinationDisplay();
+    applyOverlayMode();
+    fitKeyboard();
+
+}
 
 
 /* ============================================================
@@ -2797,6 +3270,7 @@ function buildLanguageList() {
                             currentSiteLanguage = id;
                             applySiteLanguage();
                             buildLanguageList();
+                            saveSettings();
                         }
                     })
                 );
@@ -2850,6 +3324,7 @@ function buildLanguageList() {
                         onChange: () => {
                             currentLanguage = id;
                             buildKeyboard();
+                            saveSettings();
                         }
                     })
                 );
@@ -3134,12 +3609,24 @@ document
    VISUAL SETTINGS
    ============================================================ */
 
+animationEnabled.addEventListener(
+    "change",
+    () => {
+
+        saveSettings();
+
+    }
+);
+
+
 flashCount.addEventListener(
     "input",
     () => {
 
         flashCountValue.textContent =
             flashCount.value;
+
+        saveSettings();
 
     }
 );
@@ -3152,6 +3639,8 @@ animationSpeed.addEventListener(
         animationSpeedValue.textContent =
             animationSpeed.value +
             " ms";
+
+        saveSettings();
 
     }
 );
@@ -3172,6 +3661,8 @@ keyFontScale.addEventListener(
         keyFontScaleValue.textContent =
             Math.round(scale * 100) + "%";
 
+        saveSettings();
+
     }
 );
 
@@ -3182,13 +3673,21 @@ showShiftSymbols.addEventListener(
 
         buildKeyboard();
 
+        saveSettings();
+
     }
 );
 
 
 showCombination.addEventListener(
     "change",
-    updateCombinationDisplay
+    () => {
+
+        updateCombinationDisplay();
+
+        saveSettings();
+
+    }
 );
 
 
@@ -3231,13 +3730,21 @@ mouseModifierMode.addEventListener(
 
         }
 
+        saveSettings();
+
     }
 );
 
 
 highlightBothModifiers.addEventListener(
     "change",
-    updateModifierVisuals
+    () => {
+
+        updateModifierVisuals();
+
+        saveSettings();
+
+    }
 );
 
 
@@ -3297,6 +3804,9 @@ function setLayout(layout) {
 
 
     buildKeyboard();
+
+
+    saveSettings();
 
 }
 
@@ -3363,7 +3873,13 @@ document.addEventListener(
 
 autoFit.addEventListener(
     "change",
-    fitKeyboard
+    () => {
+
+        fitKeyboard();
+
+        saveSettings();
+
+    }
 );
 
 
@@ -3391,7 +3907,13 @@ function applyOverlayMode() {
 
 overlayMode.addEventListener(
     "change",
-    applyOverlayMode
+    () => {
+
+        applyOverlayMode();
+
+        saveSettings();
+
+    }
 );
 
 applyOverlayMode();
@@ -3491,12 +4013,49 @@ resetButton.addEventListener(
 );
 
 
+/*
+    Reset settings to defaults. Clears localStorage and restores
+    every control, the languages and the layout to their defaults,
+    then closes the settings window so the reset state is visible.
+*/
+const resetSettingsButton =
+    document.getElementById(
+        "resetSettingsButton"
+    );
+
+
+resetSettingsButton.addEventListener(
+    "click",
+    () => {
+
+        resetSettings();
+
+        settingsOverlay.classList.remove(
+            "open"
+        );
+
+    }
+);
+
+
 /* ============================================================
    INITIALIZATION
    ============================================================ */
 
 currentSiteLanguage =
     detectSiteLanguage();
+
+
+/*
+    Restore any persisted settings. This may override the
+    detected site language, the keyboard layout language, the
+    compact/full mode and every control value, so it must run
+    before applySiteLanguage() and buildKeyboard().
+*/
+applySettings(
+    loadSettings()
+);
+
 
 applySiteLanguage();
 
@@ -3515,6 +4074,8 @@ buildLanguageList();
 buildKeyboard();
 
 updateCombinationDisplay();
+
+applyOverlayMode();
 
 </script>
 

@@ -1304,6 +1304,56 @@ kbd {
 }
 
 
+/*
+    Settings footer with the "Reset settings to defaults"
+    action. Sits below the settings body inside the window.
+*/
+.settings-footer {
+    padding: 14px 18px;
+
+    border-top: 1px solid var(--border);
+
+    background: #10161d;
+}
+
+.settings-reset-button {
+    padding: 8px 12px;
+
+    color: #fecaca;
+
+    background: transparent;
+
+    border: 1px solid rgba(239,68,68,.5);
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.settings-reset-button:hover {
+    color: #fff;
+
+    background: rgba(239,68,68,.15);
+
+    border-color: #f87171;
+}
+
+.settings-reset-button:active {
+    transform: translateY(1px);
+}
+
+.settings-reset-description {
+    margin-top: 5px;
+
+    color: var(--muted);
+
+    font-size: 10px;
+}
+
+
 /* =========================================================
    RESPONSIVE
    ========================================================= */

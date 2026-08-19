@@ -223,6 +223,12 @@ const siteLanguages = {
             overlayModeDescription:
                 "Transparent background for use as an overlay.",
 
+            resetSettings:
+                "Reset settings to defaults",
+
+            resetSettingsDescription:
+                "Restore all settings to their original values.",
+
             noCombination:
                 "Pressed buttons will appear here"
 
@@ -354,6 +360,12 @@ const siteLanguages = {
 
             overlayModeDescription:
                 "Прозрачный фон для использования поверх изображения.",
+
+            resetSettings:
+                "Сбросить настройки",
+
+            resetSettingsDescription:
+                "Вернуть все настройки к значениям по умолчанию.",
 
             noCombination:
                 "Нажатые кнопки появятся здесь"
