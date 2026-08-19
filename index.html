@@ -4,9 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!--
+    Cache-busting: tell browsers not to keep stale copies of this
+    page. The index.html is the entry point — if it is cached, the
+    versioned styles.css / languages.js below are never re-fetched.
+    These meta tags force browsers (and GitHub Pages) to revalidate
+    the page on every visit.
+
+    IMPORTANT: when you release a change, bump the RELEASE version
+    used in the ?v= query strings of styles.css and languages.js
+    below so returning users download the fresh assets.
+-->
+<meta http-equiv="cache-control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="expires" content="0">
+
 <title>Keyboard Visualizer</title>
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=20260819-1">
 </head>
 
 
@@ -608,7 +623,7 @@
     available inside the inline script below.
 -->
 
-<script src="languages.js"></script>
+<script src="languages.js?v=20260819-1"></script>
 
 <script>
 
