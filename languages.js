@@ -215,7 +215,7 @@ const siteLanguages = {
                 "For key-combinations press Ctrl / Shift / Alt / Win + key OR click Ctrl / Shift / Alt / Win to hold it, then click another key.",
 
             middleHint:
-                "Middle mouse button: click a key to keep it pressed (pulsing), click it again to release.",
+                "Click any with middle mouse button key to keep it pressed (pulsing), click it again to release.",
 
             overlayMode:
                 "Overlay mode",
@@ -347,7 +347,7 @@ const siteLanguages = {
                 "Для комбинаций клавиш: зажмите на своей клавиатуре Ctrl / Shift / Alt / Win и нажмите любую кнопку ИЛИ щелкните Ctrl / Shift / Alt / Win, чтобы их зажать, а затем нажмите другую клавишу.",
 
             middleHint:
-                "Средняя кнопка мыши: щелкните клавишу, чтобы удерживать её нажатой (пульсация), щелкните ещё раз, чтобы отпустить.",
+                "Щелкните любую клавишу колесом мыши, чтобы удерживать её нажатой (пульсация), щелкните ещё раз, чтобы отпустить.",
 
             overlayMode:
                 "Режим оверлея",

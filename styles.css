@@ -1376,7 +1376,9 @@ body.overlay-mode .middle-hint {
 }
 
 body.overlay-mode .combination-display {
-    margin: 0 auto 12px;
+    margin: 0 0 12px;
+
+    justify-content: flex-start;
 }
 
 body.overlay-mode .keyboard-container {
@@ -1391,15 +1393,16 @@ body.overlay-mode .keyboard-container {
 }
 
 /*
-    Center the keyboard in overlay mode so it stays aligned with
-    the centered combination display. The scale origin is moved
-    to top center so the keyboard remains centered even when the
-    auto-fit scale shrinks it on narrower windows.
+    Align the keyboard to the left edge in overlay mode and anchor
+    the scale origin to the top-left corner. Anchoring to the top
+    left (instead of top center) keeps the keyboard pinned to the
+    left edge even when the auto-fit scale shrinks it on narrower
+    windows, so it never gets cut off on the left.
 */
 body.overlay-mode .keyboard {
-    margin: 0 auto;
+    margin: 0;
 
-    transform-origin: top center;
+    transform-origin: top left;
 }
 
 /*
