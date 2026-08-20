@@ -21,7 +21,7 @@
 
 <title>Keyboard Visualizer</title>
 
-<link rel="stylesheet" href="styles.css?v=20260819-2">
+<link rel="stylesheet" href="styles.css?v=20260820-1">
 </head>
 
 
@@ -477,29 +477,6 @@
 
                         <div>
 
-                            <div class="setting-name" data-i18n="mouseModifierMode">
-                                Mouse modifier mode
-                            </div>
-
-                            <div class="setting-description" data-i18n="mouseModifierDescription">
-                                Click Ctrl / Shift / Alt / Win to hold it.
-                            </div>
-
-                        </div>
-
-                        <input
-                            type="checkbox"
-                            id="mouseModifierMode"
-                            checked
-                        >
-
-                    </div>
-
-
-                    <div class="setting-row">
-
-                        <div>
-
                             <div class="setting-name" data-i18n="highlightBothModifiers">
                                 Highlight both modifier sides
                             </div>
@@ -514,6 +491,105 @@
                         <input
                             type="checkbox"
                             id="highlightBothModifiers"
+                        >
+
+                    </div>
+
+
+                </section>
+
+
+                <!-- =================================================
+                     GENERAL
+                     ================================================= -->
+
+                <section
+                    class="settings-section"
+                    id="settings-general"
+                >
+
+                    <h3 data-i18n="general">
+                        ⚙ General
+                    </h3>
+
+                    <p class="section-description" data-i18n="generalDescription">
+                        Input behavior and interactions.
+                    </p>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <div class="setting-name" data-i18n="keyboardMode">
+                                Keyboard mode
+                            </div>
+
+                            <div class="setting-description" data-i18n="keyboardModeDescription">
+                                Compact is the default.
+                            </div>
+
+                        </div>
+
+                        <select
+                            id="keyboardModeSelect"
+                            class="settings-control"
+                        >
+
+                            <option value="compact" data-i18n="compact">
+                                Compact
+                            </option>
+
+                            <option value="full" data-i18n="full">
+                                Full
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <div class="setting-name" data-i18n="mouseOnlyMode">
+                                Mouse-only mode
+                            </div>
+
+                            <div class="setting-description" data-i18n="mouseOnlyModeDescription">
+                                Disable physical key capture; activate keys only with
+                                the left and middle mouse buttons.
+                            </div>
+
+                        </div>
+
+                        <input
+                            type="checkbox"
+                            id="mouseOnlyMode"
+                        >
+
+                    </div>
+
+
+                    <div class="setting-row">
+
+                        <div>
+
+                            <div class="setting-name" data-i18n="mouseModifierMode">
+                                Mouse modifier mode
+                            </div>
+
+                            <div class="setting-description" data-i18n="mouseModifierDescription">
+                                Click Ctrl / Shift / Alt / Win to hold it.
+                            </div>
+
+                        </div>
+
+                        <input
+                            type="checkbox"
+                            id="mouseModifierMode"
+                            checked
                         >
 
                     </div>
@@ -656,46 +732,38 @@
 
                     </div>
 
-                </section>
-
-
-                <!-- =================================================
-                     GENERAL
-                     ================================================= -->
-
-                <section
-                    class="settings-section"
-                    id="settings-general"
-                >
-
-                    <h3 data-i18n="general">
-                        General
-                    </h3>
-
-                    <p class="section-description" data-i18n="generalDescription">
-                        Input behavior and interactions.
-                    </p>
-
 
                     <div class="setting-row">
 
                         <div>
 
-                            <div class="setting-name" data-i18n="mouseOnlyMode">
-                                Mouse-only mode
+                            <div class="setting-name" data-i18n="keyboardScale">
+                                Manual keyboard scale
                             </div>
 
-                            <div class="setting-description" data-i18n="mouseOnlyModeDescription">
-                                Disable physical key capture; activate keys only with
-                                the left and middle mouse buttons.
+                            <div class="setting-description" data-i18n="keyboardScaleDescription">
+                                Manually resize the keyboard when automatic sizing is off.
                             </div>
 
                         </div>
 
-                        <input
-                            type="checkbox"
-                            id="mouseOnlyMode"
-                        >
+                        <div class="settings-range">
+
+                            <input
+                                type="range"
+                                id="keyboardScale"
+                                min="0.5"
+                                max="2"
+                                step="0.05"
+                                value="1"
+                                disabled
+                            >
+
+                            <span id="keyboardScaleValue">
+                                100%
+                            </span>
+
+                        </div>
 
                     </div>
 
@@ -735,7 +803,7 @@
     available inside the inline script below.
 -->
 
-<script src="languages.js?v=20260819-2"></script>
+<script src="languages.js?v=20260820-1"></script>
 
 <script>
 
@@ -1098,6 +1166,15 @@ const overlayAlignH =
 const overlayAlignV =
     document.getElementById("overlayAlignV");
 
+const keyboardModeSelect =
+    document.getElementById("keyboardModeSelect");
+
+const keyboardScale =
+    document.getElementById("keyboardScale");
+
+const keyboardScaleValue =
+    document.getElementById("keyboardScaleValue");
+
 
 /* ============================================================
    PERSISTENT SETTINGS
@@ -1168,7 +1245,10 @@ const DEFAULT_SETTINGS = {
         "left",
 
     overlayAlignV:
-        "top"
+        "top",
+
+    keyboardScale:
+        1
 
 };
 
@@ -1229,7 +1309,10 @@ function saveSettings() {
             overlayAlignH.value,
 
         overlayAlignV:
-            overlayAlignV.value
+            overlayAlignV.value,
+
+        keyboardScale:
+            keyboardScale.value
 
     };
 
@@ -1446,6 +1529,14 @@ function loadSettings() {
             DEFAULT_SETTINGS.keyFontScale
         );
 
+    settings.keyboardScale =
+        clamp(
+            parsed.keyboardScale,
+            0.5,
+            2,
+            DEFAULT_SETTINGS.keyboardScale
+        );
+
 
     return settings;
 
@@ -1527,6 +1618,18 @@ function applySettings(settings) {
 
     overlayAlignV.value =
         settings.overlayAlignV;
+
+    keyboardModeSelect.value =
+        settings.currentLayout;
+
+    keyboardScale.value =
+        settings.keyboardScale;
+
+    keyboardScaleValue.textContent =
+        Math.round(Number(keyboardScale.value) * 100) + "%";
+
+    keyboardScale.disabled =
+        settings.autoFit;
 
 
     document.documentElement.style.setProperty(
@@ -1611,6 +1714,18 @@ function resetSettings() {
 
     overlayAlignV.value =
         DEFAULT_SETTINGS.overlayAlignV;
+
+    keyboardModeSelect.value =
+        DEFAULT_SETTINGS.currentLayout;
+
+    keyboardScale.value =
+        DEFAULT_SETTINGS.keyboardScale;
+
+    keyboardScaleValue.textContent =
+        Math.round(Number(keyboardScale.value) * 100) + "%";
+
+    keyboardScale.disabled =
+        DEFAULT_SETTINGS.autoFit;
 
 
     document.documentElement.style.setProperty(
@@ -2676,11 +2791,32 @@ function fitKeyboard() {
 
     if (!autoFit.checked) {
 
+        const scale =
+            Number(keyboardScale.value);
+
         keyboard.style.transform =
-            "scale(1)";
+            `scale(${scale})`;
 
         keyboardStage.style.height =
-            keyboard.offsetHeight + "px";
+            (keyboard.offsetHeight * scale) + "px";
+
+        /*
+            Overlay mode: shrink the container/stage to the scaled
+            keyboard size so the overlay alignment classes can
+            position it (left/center/right, top/center/bottom).
+        */
+        if (overlayMode.checked) {
+
+            const scaledWidth =
+                keyboard.offsetWidth * scale;
+
+            keyboardStage.style.width =
+                scaledWidth + "px";
+
+            keyboardContainer.style.width =
+                scaledWidth + "px";
+
+        }
 
         syncComboWidth();
 
@@ -4425,6 +4561,9 @@ function setLayout(layout) {
     currentLayout =
         layout;
 
+    keyboardModeSelect.value =
+        layout;
+
 
     keyboard.className =
         `keyboard ${layout}`;
@@ -4531,6 +4670,40 @@ document.addEventListener(
 autoFit.addEventListener(
     "change",
     () => {
+
+        keyboardScale.disabled =
+            autoFit.checked;
+
+        fitKeyboard();
+
+        saveSettings();
+
+    }
+);
+
+
+/* ============================================================
+   KEYBOARD MODE / MANUAL SCALE
+   ============================================================ */
+
+keyboardModeSelect.addEventListener(
+    "change",
+    () => {
+
+        setLayout(keyboardModeSelect.value);
+
+        fitKeyboard();
+
+    }
+);
+
+
+keyboardScale.addEventListener(
+    "input",
+    () => {
+
+        keyboardScaleValue.textContent =
+            Math.round(Number(keyboardScale.value) * 100) + "%";
 
         fitKeyboard();
 

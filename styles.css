@@ -1227,7 +1227,11 @@ kbd {
 .settings-body {
     display: grid;
 
-    grid-template-columns: 145px 1fr;
+    grid-template-columns: 180px 1fr;
+
+    /* Allow the body to shrink so the window scales down on short
+       viewports instead of being clipped by the window's height. */
+    flex: 1 1 auto;
 
     min-height: 400px;
 
@@ -1250,6 +1254,8 @@ kbd {
     padding: 9px 10px;
 
     text-align: left;
+
+    white-space: nowrap;
 
     color: var(--muted);
 
@@ -1499,12 +1505,52 @@ kbd {
     }
 
     .settings-body {
-        grid-template-columns: 110px 1fr;
+        grid-template-columns: 1fr;
+
+        grid-template-rows: auto 1fr;
+
+        min-height: 300px;
+    }
+
+    .settings-nav {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 6px;
+
+        padding: 8px;
+
+        border-right: none;
+
+        border-bottom: 1px solid var(--border);
+    }
+
+    .settings-tab {
+        flex: 1 1 130px;
+
+        margin-bottom: 0;
+
+        text-align: center;
     }
 
     .setting-row {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+}
+
+
+/*
+    Short viewports: let the settings body shrink further so the
+    whole window (header + body + footer) fits and the content
+    scrolls inside the body rather than being clipped.
+*/
+@media(max-height: 620px) {
+
+    .settings-body {
+        min-height: 220px;
     }
 
 }

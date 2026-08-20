@@ -211,8 +211,14 @@ const siteLanguages = {
             automaticSizingDescription:
                 "Scale keyboard to fit the window.",
 
+            keyboardScale:
+                "Manual keyboard scale",
+
+            keyboardScaleDescription:
+                "Manually resize the keyboard when automatic sizing is off.",
+
             general:
-                "General",
+                "⚙ General",
 
             generalDescription:
                 "Input behavior and interactions.",
@@ -397,8 +403,14 @@ const siteLanguages = {
             automaticSizingDescription:
                 "Подстраивать размер клавиатуры под размер окна.",
 
+            keyboardScale:
+                "Ручная настройка размера клавиатуры",
+
+            keyboardScaleDescription:
+                "Вручную изменить размер клавиатуры, когда автоматический размер выключен.",
+
             general:
-                "Общие",
+                "⚙ Общие",
 
             generalDescription:
                 "Поведение ввода и взаимодействие.",
